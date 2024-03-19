@@ -14,29 +14,31 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
-    private String currentYearEndpoint; // https://data.edmonton.ca/resource/q7d6-ambg.csv
-    private String historicalEndpoint; // https://data.edmonton.ca/api/odata/v4/qi6a-xuwt.csv
+    private String endpoint; // https://data.edmonton.ca/resource/q7d6-ambg.csv
+//    private String historicalEndpoint; // https://data.edmonton.ca/api/odata/v4/qi6a-xuwt.csv
 
-    public ApiPropertyAssessmentDAO(String currentYearEndpoint, String historicalEndpoint) {
-        this.currentYearEndpoint = currentYearEndpoint;
-        this.historicalEndpoint = historicalEndpoint;
+    public ApiPropertyAssessmentDAO(String endpoint) {
+        this.endpoint = endpoint;
     }
 
-    @Override
-    public List<String> getNeighbourhoods() {
-        String query = "select distinct Neighbourhood";
+    private String formatQuery(String query) {
+        return endpoint + "?$query=" + URLEncoder.encode(query, StandardCharsets.UTF_8);
+    }
 
-        String url = currentYearEndpoint + "?$query=" + URLEncoder.encode(query, StandardCharsets.UTF_8);
-//        String url = currentYearEndpoint + "?$query=select+distinct+Neighbourhood";
-
+    private HttpResponse<String> fetchData(String query) throws IOException, InterruptedException {
+        String url = formatQuery(query);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .GET()
                 .build();
 
+        return client.send(request, HttpResponse.BodyHandlers.ofString());
+    }
+
+    private List<String> getFormattedDataColumn(String query) {
         try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = fetchData(query);
 
             return Arrays.stream(response.body().split("\n"))
                     .map(x -> x.replace("\"", ""))
@@ -45,14 +47,18 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
                     .collect(Collectors.toList());
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
+            return List.of("Error: unable to fetch data");
         }
+    }
 
-        return null;
+    @Override
+    public List<String> getNeighbourhoods() {
+        return getFormattedDataColumn("select distinct neighbourhood");
     }
 
     @Override
     public List<String> getAssessmentClasses() {
-        return null;
+        return getFormattedDataColumn("select distinct mill_class_1");
     }
 
     @Override
