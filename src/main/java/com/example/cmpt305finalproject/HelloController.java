@@ -34,7 +34,6 @@ public class HelloController implements Initializable {
         assessmentClassesCB.setItems(list);
 
         List<String> allNeighbourhoods = getAllNeighbourhoods("neighbourhoods.txt");
-        System.out.println(allNeighbourhoods);
         neighbourhoodsCB.getItems().setAll(allNeighbourhoods);
     }
 
