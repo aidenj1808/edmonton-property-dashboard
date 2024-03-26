@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
     private String endpoint; // https://data.edmonton.ca/resource/q7d6-ambg.csv
-//    private String historicalEndpoint; // https://data.edmonton.ca/api/odata/v4/qi6a-xuwt.csv
+//    private String historicalEndpoint; // https://data.edmonton.ca/resource/qi6a-xuwt.csv
 
     public ApiPropertyAssessmentDAO(String endpoint) {
         this.endpoint = endpoint;
@@ -53,7 +53,7 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
 
     @Override
     public List<String> getNeighbourhoods() {
-        return getFormattedDataColumn("select distinct neighbourhood");
+        return getFormattedDataColumn("select distinct neighbourhood_name");
     }
 
     @Override
@@ -64,5 +64,24 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
     @Override
     public List<PropertyAssessments> getNeighbourhoodData(String neighbourhood) {
         return null;
+    }
+
+    public List<String> getYearAssessedValue(String neighbourhood, String assessmentClass) {
+        return getFormattedDataColumn("select assessment_year, assessed_value " +
+                                             //"limit = 50000 " +
+                                             "where neighbourhood_name = '" + neighbourhood + "' " +
+                                             "and mill_class_1 = '" + assessmentClass + "' " +
+                                             "and tax_class_pct_1 = '100' " +
+                                             "and assessed_value != 0");
+    }
+
+    public List<String> getYearAssessedValueSum(String neighbourhood, String assessmentClass) {
+        return getFormattedDataColumn("select assessment_year, sum(assessed_value) " +
+                //"limit = 50000 " +
+                "where neighbourhood_name = '" + neighbourhood + "' " +
+                "and mill_class_1 = '" + assessmentClass + "' " +
+                "and tax_class_pct_1 = '100' " +
+                "and assessed_value != 0 " +
+                "group by assessment_year");
     }
 }
