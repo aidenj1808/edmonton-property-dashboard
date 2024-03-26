@@ -38,13 +38,7 @@ public class HelloController implements Initializable {
 
         //List<String> neighbourhoods = propertyAssessmentDAO.getNeighbourhoods();
         List<String> historicalNeighbourhoods = historicalPropertyAssessmentDAO.getNeighbourhoods();
-        System.out.println(historicalNeighbourhoods.size());
-        System.out.println(historicalNeighbourhoods);
         neighbourhoodsCB.getItems().setAll(historicalNeighbourhoods);
-
-        List<String> test = historicalPropertyAssessmentDAO.getYearAssessedValueSum("DOWNTOWN", "COMMERCIAL");
-        System.out.println(test.size());
-        System.out.println(test);
     }
 
     public void generateGraphClick() {
@@ -54,9 +48,11 @@ public class HelloController implements Initializable {
         String assessmentClass = assessmentClassesCB.getValue();
         String neighbourhood = neighbourhoodsCB.getValue();
         //List<String> data = paDAO.getYearAssessedValue(neighbourhood, assessmentClass);
-        List<String> data = paDAO.getYearAssessedValueSum(neighbourhood, assessmentClass);
+        List<String> sumData = paDAO.getYearAssessedValueSum(neighbourhood, assessmentClass);
+        List<String> avgData = paDAO.getYearAssessedValueAvg(neighbourhood, assessmentClass);
 
-        Graphing graphing = new Graphing(data);
+
+        Graphing graphing = new Graphing(avgData);
         XYChart.Series series = new XYChart.Series();
         HashMap<String, Long> map = graphing.getYearAccessedValueMap();
 
