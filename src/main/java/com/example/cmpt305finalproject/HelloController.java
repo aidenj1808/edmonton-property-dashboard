@@ -5,6 +5,7 @@ import com.example.cmpt305finalproject.DAOs.ApiPropertyAssessmentDAO;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
+import org.controlsfx.control.SearchableComboBox;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -14,7 +15,7 @@ public class HelloController implements Initializable {
     private ComboBox<String> assessmentClassesCB;
 
     @FXML
-    private ComboBox<String> neighbourhoodsCB;
+    private SearchableComboBox<String> neighbourhoodsCB;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
