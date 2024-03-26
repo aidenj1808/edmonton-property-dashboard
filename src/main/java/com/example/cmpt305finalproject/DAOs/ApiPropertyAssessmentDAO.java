@@ -62,7 +62,7 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
     }
 
     @Override
-    public List<PropertyAssessments> getNeighbourhoodHistoricalData(String neighbourhood) {
+    public List<PropertyAssessments> getNeighbourhoodData(String neighbourhood) {
         return null;
     }
 }

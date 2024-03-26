@@ -7,5 +7,5 @@ import java.util.List;
 public interface PropertyAssessmentDAO {
     List<String> getNeighbourhoods();
     List<String> getAssessmentClasses();
-    List<PropertyAssessments> getNeighbourhoodHistoricalData(String neighbourhood);
+    List<PropertyAssessments> getNeighbourhoodData(String neighbourhood);
 }
