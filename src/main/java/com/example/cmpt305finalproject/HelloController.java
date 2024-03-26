@@ -23,7 +23,7 @@ public class HelloController implements Initializable {
     private SearchableComboBox<String> neighbourhoodsCB;
 
     @FXML
-    private LineChart<String, Integer> lineChart;
+    private LineChart<String, Long> lineChart;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -58,9 +58,9 @@ public class HelloController implements Initializable {
 
         Graphing graphing = new Graphing(data);
         XYChart.Series series = new XYChart.Series();
-        HashMap<String, Integer> map = graphing.getYearAccessedValueMap();
+        HashMap<String, Long> map = graphing.getYearAccessedValueMap();
 
-        map.entrySet().stream().sorted(Map.Entry.<String, Integer>comparingByKey())
+        map.entrySet().stream().sorted(Map.Entry.<String, Long>comparingByKey())
                                .forEach(p -> series.getData().add(new XYChart.Data(p.getKey(), p.getValue())));
         lineChart.setTitle("Historical Data - Sum of Assessed Values vs Year");
         lineChart.setLegendVisible(false);
