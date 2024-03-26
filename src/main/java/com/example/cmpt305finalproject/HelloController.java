@@ -6,12 +6,11 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
-
+import org.controlsfx.control.SearchableComboBox;
 import java.io.BufferedReader;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -21,7 +20,7 @@ public class HelloController implements Initializable {
     private ComboBox<String> assessmentClassesCB;
 
     @FXML
-    private ComboBox<String> neighbourhoodsCB;
+    private SearchableComboBox<String> neighbourhoodsCB;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
