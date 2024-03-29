@@ -74,6 +74,8 @@
                   <Insets bottom="20.0" left="50.0" right="20.0" top="20.0" />
                </VBox.margin>
             </Button>
+            <Button alignment="BOTTOM_CENTER" mnemonicParsing="false" onAction="#MinClick" prefHeight="20.0" prefWidth="74.0" text="Min" />
+            <Button mnemonicParsing="false" text="Max" onAction="#MaxClick"/>
          </children>
          <padding>
             <Insets right="100.0" />

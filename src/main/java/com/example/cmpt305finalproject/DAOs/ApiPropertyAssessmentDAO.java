@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
+public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
     private String endpoint; // https://data.edmonton.ca/resource/q7d6-ambg.csv
 //    private String historicalEndpoint; // https://data.edmonton.ca/resource/qi6a-xuwt.csv
 
@@ -85,4 +85,30 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
                 "and assessed_value != 0 " +
                 "group by assessment_year");
     }
+
+    public List<String> getMinimumValueOutliers(String neighbourhood, String assessmentClass) {
+        return getFormattedDataColumn("select assessment_year, assessed_value " +
+                "where neighbourhood_name = '" + neighbourhood + "' " +
+                "and mill_class_1 = '" + assessmentClass + "' " +
+                "and tax_class_pct_1 = '100' " +
+                "and assessed_value != 0 " +
+                "group by assessment_year" +
+                "order by assessed_value ASC" +
+                "limit = 10) AS sub query"
+        );
+    }
+
+    public List<String> getMaximumValueOutliers(String neighbourhood, String assessmentClass) {
+        return getFormattedDataColumn("select assessment_year, assessed_value " +
+                "where neighbourhood_name = '" + neighbourhood + "' " +
+                "and mill_class_1 = '" + assessmentClass + "' " +
+                "and tax_class_pct_1 = '100' " +
+                "and assessed_value != 0 " +
+                "group by assessment_year" +
+                "order by assessed_value DESC" +
+                "limit = 10) AS sub query"
+        );
+    }
 }
+
+

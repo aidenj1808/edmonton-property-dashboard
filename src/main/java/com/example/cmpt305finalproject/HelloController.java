@@ -56,4 +56,38 @@ public class HelloController implements Initializable {
         lineChart.setLegendVisible(false);
         lineChart.getData().add(lineGraphSeries.getSeries());
     }
+    public void MinClick() {
+        lineChart.getData().clear();
+        String assessmentClass = assessmentClassesCB.getValue();
+        String neighbourhood = neighbourhoodsCB.getValue();
+
+        ApiPropertyAssessmentDAO paDAO =
+                new ApiPropertyAssessmentDAO("https://data.edmonton.ca/resource/qi6a-xuwt.csv");
+        List<String> minData = paDAO.getMinimumValueOutliers(neighbourhood, assessmentClass);
+        System.out.println(minData);
+
+        AssessValueYearMap assessValueYearMap = new AssessValueYearMap(minData);
+        LineGraphSeries lineGraphSeries = new LineGraphSeries(assessValueYearMap);
+
+        lineChart.setTitle("Historical Data - Sum of Assessed Values(MINS) vs Year");
+        lineChart.setLegendVisible(false);
+        lineChart.getData().add(lineGraphSeries.getSeries());
+    }
+    public void MaxClick() {
+        lineChart.getData().clear();
+        String assessmentClass = assessmentClassesCB.getValue();
+        String neighbourhood = neighbourhoodsCB.getValue();
+
+        ApiPropertyAssessmentDAO paDAO =
+                new ApiPropertyAssessmentDAO("https://data.edmonton.ca/resource/qi6a-xuwt.csv");
+        List<String> maxData = paDAO.getMaximumValueOutliers(neighbourhood, assessmentClass);
+        System.out.println(maxData);
+
+        AssessValueYearMap assessValueYearMap = new AssessValueYearMap(maxData);
+        LineGraphSeries lineGraphSeries = new LineGraphSeries(assessValueYearMap);
+
+        lineChart.setTitle("Historical Data - Sum of Assessed Values(MAXS) vs Year");
+        lineChart.setLegendVisible(false);
+        lineChart.getData().add(lineGraphSeries.getSeries());
+    }
 }
