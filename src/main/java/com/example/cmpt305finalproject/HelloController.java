@@ -2,17 +2,15 @@ package com.example.cmpt305finalproject;
 
 
 import com.example.cmpt305finalproject.DAOs.ApiPropertyAssessmentDAO;
-import com.example.cmpt305finalproject.cmpt305.Graphing;
+import com.example.cmpt305finalproject.cmpt305.AssessValueYearMap;
+import com.example.cmpt305finalproject.cmpt305.LineGraphSeries;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
 import org.controlsfx.control.SearchableComboBox;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 public class HelloController implements Initializable {
@@ -43,23 +41,19 @@ public class HelloController implements Initializable {
 
     public void generateGraphClick() {
         lineChart.getData().clear();
-        ApiPropertyAssessmentDAO paDAO =
-                new ApiPropertyAssessmentDAO("https://data.edmonton.ca/resource/qi6a-xuwt.csv");
         String assessmentClass = assessmentClassesCB.getValue();
         String neighbourhood = neighbourhoodsCB.getValue();
-        //List<String> data = paDAO.getYearAssessedValue(neighbourhood, assessmentClass);
+
+        ApiPropertyAssessmentDAO paDAO =
+                new ApiPropertyAssessmentDAO("https://data.edmonton.ca/resource/qi6a-xuwt.csv");
         List<String> sumData = paDAO.getYearAssessedValueSum(neighbourhood, assessmentClass);
-        List<String> avgData = paDAO.getYearAssessedValueAvg(neighbourhood, assessmentClass);
+        System.out.println(sumData);
 
+        AssessValueYearMap assessValueYearMap = new AssessValueYearMap(sumData);
+        LineGraphSeries lineGraphSeries = new LineGraphSeries(assessValueYearMap);
 
-        Graphing graphing = new Graphing(avgData);
-        XYChart.Series series = new XYChart.Series();
-        HashMap<String, Long> map = graphing.getYearAccessedValueMap();
-
-        map.entrySet().stream().sorted(Map.Entry.<String, Long>comparingByKey())
-                               .forEach(p -> series.getData().add(new XYChart.Data(p.getKey(), p.getValue())));
         lineChart.setTitle("Historical Data - Sum of Assessed Values vs Year");
         lineChart.setLegendVisible(false);
-        lineChart.getData().add(series);
+        lineChart.getData().add(lineGraphSeries.getSeries());
     }
 }
