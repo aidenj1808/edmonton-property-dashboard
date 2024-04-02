@@ -7,10 +7,12 @@ import com.example.cmpt305finalproject.cmpt305.LineGraphSeries;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
 import org.controlsfx.control.SearchableComboBox;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class HelloController implements Initializable {
@@ -44,13 +46,15 @@ public class HelloController implements Initializable {
         String assessmentClass = assessmentClassesCB.getValue();
         String neighbourhood = neighbourhoodsCB.getValue();
 
+        generateSumGraph(neighbourhood, assessmentClass);
+    }
+
+    private void generateSumGraph(String neighbourhood, String assessmentClass) {
         ApiPropertyAssessmentDAO paDAO =
                 new ApiPropertyAssessmentDAO("https://data.edmonton.ca/resource/qi6a-xuwt.csv");
-        List<String> sumData = paDAO.getYearAssessedValueSum(neighbourhood, assessmentClass);
-        System.out.println(sumData);
+        Map<String, Long> sumData = paDAO.getYearAssessedValueSum(neighbourhood, assessmentClass);
 
-        AssessValueYearMap assessValueYearMap = new AssessValueYearMap(sumData);
-        LineGraphSeries lineGraphSeries = new LineGraphSeries(assessValueYearMap);
+        LineGraphSeries lineGraphSeries = new LineGraphSeries(sumData);
 
         lineChart.setTitle("Historical Data - Sum of Assessed Values vs Year");
         lineChart.setLegendVisible(false);

@@ -1,6 +1,7 @@
 package com.example.cmpt305finalproject.DAOs;
 
 import com.example.cmpt305finalproject.cmpt305.PropertyAssessments;
+import javafx.scene.chart.XYChart;
 
 import java.io.IOException;
 import java.net.URI;
@@ -10,8 +11,13 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import static java.lang.Integer.parseInt;
+import static java.lang.Long.parseLong;
 
 public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
     private String endpoint; // https://data.edmonton.ca/resource/q7d6-ambg.csv
@@ -66,23 +72,50 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
         return null;
     }
 
-    public List<String> getYearAssessedValueSum(String neighbourhood, String assessmentClass) {
-        return getFormattedDataColumn("select assessment_year, sum(assessed_value) " +
+    private Map<String, String> getYearNumericalSummary(String neighbourhood, String assessmentClass, String func) {
+        String query = "select assessment_year, " + func + "(assessed_value) " +
                 //"limit = 50000 " +
                 "where neighbourhood_name = '" + neighbourhood + "' " +
                 "and mill_class_1 = '" + assessmentClass + "' " +
                 "and tax_class_pct_1 = '100' " +
                 "and assessed_value != 0 " +
-                "group by assessment_year");
+                "group by assessment_year";
+        List<String> data = getFormattedDataColumn(query);
+
+        try {
+            HttpResponse<String> response = fetchData(query);
+
+            return Arrays.stream(response.body().split("\n"))
+                    .map(x -> x.replace("\"", "").split(","))
+                    .skip(1)
+                    .collect(Collectors.toMap(x -> x[0],
+                            x -> x[1]));
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return new HashMap<String, String>();
+        }
     }
 
-    public List<String> getYearAssessedValueAvg(String neighbourhood, String assessmentClass) {
-        return getFormattedDataColumn("select assessment_year, avg(assessed_value) " +
-                //"limit = 50000 " +
-                "where neighbourhood_name = '" + neighbourhood + "' " +
-                "and mill_class_1 = '" + assessmentClass + "' " +
-                "and tax_class_pct_1 = '100' " +
-                "and assessed_value != 0 " +
-                "group by assessment_year");
+    public Map<String, Long> getYearAssessedValueSum(String neighbourhood, String assessmentClass) {
+        Map<String, String> data = getYearNumericalSummary(neighbourhood, assessmentClass, "sum");
+        Map<String, Long> out = new HashMap<>();
+
+        data.forEach((key, value) -> {
+            out.put(key, parseLong(value));
+        });
+        return out;
     }
+
+    public Map<String, Long> getYearAssessedValueAvg(String neighbourhood, String assessmentClass) {
+        Map<String, String> data = getYearNumericalSummary(neighbourhood, assessmentClass, "avg");
+        Map<String, Long> out = new HashMap<>();
+
+        data.forEach((key, value) -> {
+            out.put(key, (long) Integer.parseInt(value));
+        });
+        return out;
+    }
+
+    
 }
