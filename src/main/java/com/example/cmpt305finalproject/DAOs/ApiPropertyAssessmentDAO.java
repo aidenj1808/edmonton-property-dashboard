@@ -10,11 +10,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.lang.Integer.parseInt;
@@ -37,8 +33,26 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
         return endpoint + "?$query=" + URLEncoder.encode(query, StandardCharsets.UTF_8);
     }
 
+    private String formatQuery(String select, String where, String order, int limit, int offset) {
+//        String query =
+//                "?$select=" + URLEncoder.encode(select, StandardCharsets.UTF_8) +
+//                "&$where=" + URLEncoder.encode(where, StandardCharsets.UTF_8) +
+//                "&$order=" + URLEncoder.encode(order + " ASC", StandardCharsets.UTF_8) +
+//                "&$limit=" + limit +
+//                "&$offset=" + offset;
+
+        String query = "?$select=" + URLEncoder.encode("assessed_value", StandardCharsets.UTF_8) +
+//                "&$where=" + URLEncoder.encode("neighbourhood_name='ABBOTTSFIELD'", StandardCharsets.UTF_8) +
+                "&$order=" + URLEncoder.encode(order, StandardCharsets.UTF_8) +
+                "&$limit=" + limit +
+                "&$offset=" + offset;
+
+        return endpoint + query;
+    }
+
     private HttpResponse<String> fetchData(String query) throws IOException, InterruptedException {
         String url = formatQuery(query);
+
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
@@ -83,6 +97,33 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
         return "";
     }
 
+    private HttpResponse<String> fetchData(String select, String where, String order, int limit, int offset) throws IOException, InterruptedException {
+        String url = formatQuery(select, where, order, limit, offset);
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .build();
+
+        return client.send(request, HttpResponse.BodyHandlers.ofString());
+    }
+
+    private List<String> getFormattedDataColumn(String select, String where, String order, int limit, int offset) {
+        try {
+            HttpResponse<String> response = fetchData(select, where, order, limit, offset);
+
+            return Arrays.stream(response.body().split("\n"))
+                    .map(x -> x.replace("\"", ""))
+                    .skip(1)
+                    .sorted()
+                    .collect(Collectors.toList());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return List.of("Error: unable to fetch data");
+        }
+    }
+
     private List<String> getFormattedDataColumn(String query) {
         try {
             HttpResponse<String> response = fetchData(query);
@@ -116,7 +157,6 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
 
     private Map<String, String> getYearNumericalSummary(String neighbourhood, String assessmentClass, String func) {
         String query = "select assessment_year, " + func + "(assessed_value) " +
-                //"limit = 50000 " +
                 "where neighbourhood_name = '" + neighbourhood + "' " +
                 "and mill_class_1 = '" + assessmentClass + "' " +
                 "and tax_class_pct_1 = '100' " +
@@ -159,5 +199,29 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
         return out;
     }
 
-    
+    public List<Long> getValuesByYear(String neighbourhood, String assessmentClass, int year) {
+        int limit = 1000;
+        int offset = 0;
+        String query = "select assessed_value " +
+                "where neighbourhood_name = '" + neighbourhood + "' " +
+                "and mill_class_1 = '" + assessmentClass + "' " +
+                "and tax_class_pct_1 = '100' " +
+                "and assessed_value != 0 " +
+                "and assessment_year = " + year +
+                "order by assessed_value ASC ";
+
+        List<Long> allData = new ArrayList<>();
+        List<String> newData;
+
+        List<String> testData = getFormattedDataColumn(query);
+
+        do {
+            newData = getFormattedDataColumn(query + "limit " + limit + " offset " + offset);
+            newData.forEach(value -> allData.add(Long.parseLong(value)));
+
+            offset += limit;
+        } while (!newData.isEmpty());
+
+        return allData;
+    }
 }

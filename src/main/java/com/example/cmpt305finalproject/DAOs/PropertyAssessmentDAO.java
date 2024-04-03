@@ -8,4 +8,6 @@ public interface PropertyAssessmentDAO {
     List<String> getNeighbourhoods();
     List<String> getAssessmentClasses();
     List<PropertyAssessments> getNeighbourhoodData(String neighbourhood);
+
+    List<Long> getValuesByYear(String neighbourhood, String assessmentClass, int year);
 }

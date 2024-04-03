@@ -19,6 +19,7 @@ class ApiPropertyAssessmentDAOTest {
 
         testClassCurrent = new ApiPropertyAssessmentDAO(currentDataEndpoint);
         testClassHistorical = new ApiPropertyAssessmentDAO(historicalDataEndpoint);
+
     }
 
     @AfterEach
@@ -54,6 +55,12 @@ class ApiPropertyAssessmentDAOTest {
     }
 
     @Test
-    void getNeighbourhoodHistoricalData() {
+    void getValuesByYear() {
+        String assessmentClass = "COMMERCIAL";
+        String neighbourhood = "ABBOTTSFIELD";
+        int year = 2022;
+
+        List<Long> data = testClassHistorical.getValuesByYear(neighbourhood, assessmentClass, year);
+        System.out.println(data);
     }
 }
