@@ -1,7 +1,6 @@
 package com.example.cmpt305finalproject.DAOs;
 
 import com.example.cmpt305finalproject.cmpt305.PropertyAssessments;
-import javafx.scene.chart.XYChart;
 
 import java.io.IOException;
 import java.net.URI;
@@ -13,13 +12,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
 
 public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
     private String nbh;
     private String endpoint; // https://data.edmonton.ca/resource/q7d6-ambg.csv
-//    private String historicalEndpoint; // https://data.edmonton.ca/resource/qi6a-xuwt.csv
 
     public ApiPropertyAssessmentDAO(String endpoint) {
         this.endpoint = endpoint;
@@ -31,23 +28,6 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
             query = query.replace("neighbourhood_name", nbh);
         }
         return endpoint + "?$query=" + URLEncoder.encode(query, StandardCharsets.UTF_8);
-    }
-
-    private String formatQuery(String select, String where, String order, int limit, int offset) {
-//        String query =
-//                "?$select=" + URLEncoder.encode(select, StandardCharsets.UTF_8) +
-//                "&$where=" + URLEncoder.encode(where, StandardCharsets.UTF_8) +
-//                "&$order=" + URLEncoder.encode(order + " ASC", StandardCharsets.UTF_8) +
-//                "&$limit=" + limit +
-//                "&$offset=" + offset;
-
-        String query = "?$select=" + URLEncoder.encode("assessed_value", StandardCharsets.UTF_8) +
-//                "&$where=" + URLEncoder.encode("neighbourhood_name='ABBOTTSFIELD'", StandardCharsets.UTF_8) +
-                "&$order=" + URLEncoder.encode(order, StandardCharsets.UTF_8) +
-                "&$limit=" + limit +
-                "&$offset=" + offset;
-
-        return endpoint + query;
     }
 
     private HttpResponse<String> fetchData(String query) throws IOException, InterruptedException {
@@ -95,33 +75,6 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
             }
         }
         return "";
-    }
-
-    private HttpResponse<String> fetchData(String select, String where, String order, int limit, int offset) throws IOException, InterruptedException {
-        String url = formatQuery(select, where, order, limit, offset);
-
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .GET()
-                .build();
-
-        return client.send(request, HttpResponse.BodyHandlers.ofString());
-    }
-
-    private List<String> getFormattedDataColumn(String select, String where, String order, int limit, int offset) {
-        try {
-            HttpResponse<String> response = fetchData(select, where, order, limit, offset);
-
-            return Arrays.stream(response.body().split("\n"))
-                    .map(x -> x.replace("\"", ""))
-                    .skip(1)
-                    .sorted()
-                    .collect(Collectors.toList());
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-            return List.of("Error: unable to fetch data");
-        }
     }
 
     private List<String> getFormattedDataColumn(String query) {
@@ -213,7 +166,6 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
         List<Long> allData = new ArrayList<>();
         List<String> newData;
 
-        List<String> testData = getFormattedDataColumn(query);
 
         do {
             newData = getFormattedDataColumn(query + "limit " + limit + " offset " + offset);
