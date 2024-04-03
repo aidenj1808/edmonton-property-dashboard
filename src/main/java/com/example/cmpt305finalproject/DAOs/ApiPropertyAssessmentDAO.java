@@ -10,6 +10,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -20,14 +21,19 @@ import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
 
 public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
+    private String nbh;
     private String endpoint; // https://data.edmonton.ca/resource/q7d6-ambg.csv
 //    private String historicalEndpoint; // https://data.edmonton.ca/resource/qi6a-xuwt.csv
 
     public ApiPropertyAssessmentDAO(String endpoint) {
         this.endpoint = endpoint;
+        nbh = getNeighbourhoodHeaderType();
     }
 
     private String formatQuery(String query) {
+        if (nbh != null) {
+            query = query.replace("neighbourhood_name", nbh);
+        }
         return endpoint + "?$query=" + URLEncoder.encode(query, StandardCharsets.UTF_8);
     }
 
@@ -42,6 +48,41 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
         return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
+    private List<String> getHeader() {
+        try {
+            HttpResponse<String> response = fetchData("Select* limit 1");
+
+            return Arrays.stream(Arrays.stream(response.body().split("\n"))
+                    .map(x -> x.replace("\"", ""))
+                    .toList()
+                    .getFirst()
+                    .split(","))
+                    .toList();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return new ArrayList<String>();
+        }
+    }
+
+    /**
+     * check how the neighbourhood column is represented in the data
+     * helps to automatically differentiate between current year and historical datasets, which have inconsistent column names
+     *
+     * @return the label of the neighbourhood column, or an empty string if no such column is present
+     */
+    private String getNeighbourhoodHeaderType() {
+        List<String> header = getHeader();
+        for (String column : header) {
+            if (column.equals("neighbourhood_name")) {
+                return "neighbourhood_name";
+            }
+            if (column.equals("neighbourhood")) {
+                return "neighbourhood";
+            }
+        }
+        return "";
+    }
+
     private List<String> getFormattedDataColumn(String query) {
         try {
             HttpResponse<String> response = fetchData(query);
@@ -50,6 +91,7 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
                     .map(x -> x.replace("\"", ""))
                     .skip(1)
                     .sorted()
+                    .filter(x -> !x.isEmpty())
                     .collect(Collectors.toList());
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
