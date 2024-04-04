@@ -191,6 +191,8 @@
                         <TableColumn fx:id="garageColumn" maxWidth="50.0" minWidth="-1.0" prefWidth="50.0" text="Garage" />
                      </columns>
                   </TableView>
+                  <Button mnemonicParsing="false" text="Previous" translateY="20.0" />
+                  <Button mnemonicParsing="false" text="Next" translateX="82.0" translateY="-3.0" />
                </children>
                <padding>
                   <Insets bottom="40.0" left="10.0" right="10.0" />
