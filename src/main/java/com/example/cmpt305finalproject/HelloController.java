@@ -70,10 +70,12 @@ public class HelloController implements Initializable {
     private LineChart<String, Long> lineChart;
 
     private int page = 0;
+    private int pageSize;
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        pageSize = 100;
         currentYearDAO = new ApiPropertyAssessmentDAO(currentYearEndpoint);
         historicalDAO = new ApiPropertyAssessmentDAO(historicalEndpoint);
 
@@ -157,7 +159,7 @@ public class HelloController implements Initializable {
         String assessmentClass = assessmentClassesCB.getValue();
         String neighbourhood = neighbourhoodsCB.getValue();
 
-        ObservableList<TableViewEntry> data = historicalDAO.getTablePage(neighbourhood, assessmentClass, page);
+        ObservableList<TableViewEntry> data = historicalDAO.getTablePage(neighbourhood, assessmentClass, page, pageSize);
         propertyTable.setItems(data);
     }
 
@@ -169,10 +171,12 @@ public class HelloController implements Initializable {
     }
 
     public int tableViewNextButtonClick(){
-        page += 1;
-        System.out.println(page);
+        if (propertyTable.getItems().size() >= pageSize) {
+            page += 1;
+            System.out.println(page);
 
-        updateTableValues(page);
+            updateTableValues(page);
+        }
         return page;
     }
 
