@@ -139,6 +139,8 @@ public class HelloController implements Initializable {
     public void clearButtonClick() {
         lineChart.getData().clear();
         lineChart.setTitle(null);
+
+        propertyTable.getItems().clear();
     }
 
     public void updateTableValues(int page) {
