@@ -75,12 +75,12 @@ class ApiPropertyAssessmentDAOTest {
     }
 
     @Test
-    void testRemoveOutliers() {
+    void testRemoveOutliersAvg() {
         String assessmentClass = "COMMERCIAL";
         String neighbourhood = "ABBOTTSFIELD";
         int year = 2022;
 
-        List<Long> data = testClassHistorical.getValuesByYearNoOutliers(neighbourhood, assessmentClass, year);
+        Map<String, Long> data = testClassHistorical.getYearAvgNoOutliers(neighbourhood, assessmentClass);
         System.out.println(data);
     }
 

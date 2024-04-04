@@ -152,6 +152,24 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
         return out;
     }
 
+    public Map<String, Long> getYearAvgNoOutliers(String neighbourhood, String assessmentClass) {
+        List<String> years = getFormattedDataColumn("select distinct assessment_year");
+        Map<String, Long> out = new HashMap<>();
+
+        for (String year : years) {
+            List<Long> values = getValuesByYearNoOutliers(neighbourhood, assessmentClass, Integer.parseInt(year));
+
+            long avg = 0;
+            for (Long value : values) {
+                avg += value / values.size();
+            }
+
+            out.put(year, avg);
+        }
+
+        return out;
+    }
+
     public List<Long> getValuesByYear(String neighbourhood, String assessmentClass, int year) {
         int limit = 1000;
         int offset = 0;

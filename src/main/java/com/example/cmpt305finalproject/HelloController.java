@@ -76,6 +76,8 @@ public class HelloController implements Initializable {
         return switch (series) {
             case "Sum" -> historicalDAO.getYearAssessedValueSum(neighbourhood, assessmentClass);
             case "Average" -> historicalDAO.getYearAssessedValueAvg(neighbourhood, assessmentClass);
+            case "Median" -> historicalDAO.getYearAssessedValueMedian(neighbourhood, assessmentClass);
+            case "Average without outliers" -> historicalDAO.getYearAvgNoOutliers(neighbourhood, assessmentClass);
             default -> throw new IllegalArgumentException("Invalid graph series selected");
         };
     }
