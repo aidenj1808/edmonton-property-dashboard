@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableView;
 import org.controlsfx.control.SearchableComboBox;
 import java.net.URL;
 import java.util.List;
@@ -21,6 +22,12 @@ public class HelloController implements Initializable {
 
     @FXML
     private SearchableComboBox<String> neighbourhoodsCB;
+
+    @FXML
+    private ComboBox<String> seriesCB;
+
+    //@FXML
+    //private TableView<ObservableList> propertyTable;
 
     @FXML
     private LineChart<String, Long> lineChart;
@@ -59,5 +66,13 @@ public class HelloController implements Initializable {
         lineChart.setTitle("Historical Data - Sum of Assessed Values vs Year");
         lineChart.setLegendVisible(false);
         lineChart.getData().add(lineGraphSeries.getSeries());
+    }
+
+    public void generateSummaryClick() {
+        //TODO
+    }
+
+    public void clearButtonClick() {
+        //TODO
     }
 }
