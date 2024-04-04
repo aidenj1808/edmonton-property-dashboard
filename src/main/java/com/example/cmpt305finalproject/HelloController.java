@@ -69,6 +69,9 @@ public class HelloController implements Initializable {
     @FXML
     private LineChart<String, Long> lineChart;
 
+    @FXML
+    private Label tableViewPageLabel;
+
     private int page = 0;
 
 
@@ -139,15 +142,14 @@ public class HelloController implements Initializable {
 
     public void generatePropertiesTableButtonClick() {
         page = 0;
-        System.out.println(page);
-
+        setTableViewPageLabel();
         updateTableValues(0);
     }
 
     public void clearButtonClick() {
         lineChart.getData().clear();
         lineChart.setTitle(null);
-
+        tableViewPageLabel.setText("No Pages");
         propertyTable.getItems().clear();
     }
 
@@ -161,17 +163,25 @@ public class HelloController implements Initializable {
 
     public int tableViewNextButtonClick(){
         page += 1;
-        System.out.println(page);
-
         updateTableValues(page);
+        setTableViewPageLabel();
         return page;
     }
 
     public int tableViewPreviousButtonClick(){
-
-        page -= 1;
-        System.out.println(page);
-        updateTableValues(page);
+        if (page == 0){
+            return page;
+        }
+        else {
+            page -= 1;
+            updateTableValues(page);
+        }
+        setTableViewPageLabel();
         return page;
+    }
+
+    public void setTableViewPageLabel(){
+        String newText = "Page: " + (page+1); // add out of page size
+        tableViewPageLabel.setText(newText);
     }
 }
