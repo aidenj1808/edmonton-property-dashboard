@@ -220,7 +220,7 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
         int size = assessmentValues.size();
         // even
         if ((size % 2) == 0) {
-            return ((assessmentValues.get((size / 2) - 1)) + assessmentValues.get(size / 2) / 2);
+            return ( (assessmentValues.get((size / 2) - 1) + assessmentValues.get(size / 2) ) / 2);
         }
         // odd
         else {
