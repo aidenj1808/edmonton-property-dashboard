@@ -193,6 +193,7 @@
                   </TableView>
                   <Button fx:id="tableViewPreviousButtonClick" mnemonicParsing="false" onAction="#tableViewPreviousButtonClick" text="Previous" translateY="20.0" />
                   <Button fx:id="tableViewNextButton" mnemonicParsing="false" onAction="#tableViewNextButtonClick" text="Next" translateX="82.0" translateY="-3.0" />
+                  <Label fx:id="tableViewPageLabel" text="No Pages " translateX="144.0" translateY="-23.0" />
                </children>
                <padding>
                   <Insets bottom="40.0" left="10.0" right="10.0" />
