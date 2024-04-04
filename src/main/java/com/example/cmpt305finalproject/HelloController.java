@@ -10,6 +10,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import org.controlsfx.control.SearchableComboBox;
 import java.net.URL;
 import java.util.*;
@@ -65,6 +69,9 @@ public class HelloController implements Initializable {
     @FXML
     private LineChart<String, Long> lineChart;
 
+    private int page = 0;
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         currentYearDAO = new ApiPropertyAssessmentDAO(currentYearEndpoint);
@@ -108,8 +115,6 @@ public class HelloController implements Initializable {
         }
         lineGraphSeries.getSeries().setName(series);
 
-
-
         lineChart.setLegendVisible(true);
         lineChart.getData().add(lineGraphSeries.getSeries());
     }
@@ -133,6 +138,9 @@ public class HelloController implements Initializable {
     }
 
     public void generatePropertiesTableButtonClick() {
+        page = 0;
+        System.out.println(page);
+
         updateTableValues(0);
     }
 
@@ -149,5 +157,21 @@ public class HelloController implements Initializable {
 
         ObservableList<TableViewEntry> data = historicalDAO.getTablePage(neighbourhood, assessmentClass, page);
         propertyTable.setItems(data);
+    }
+
+    public int tableViewNextButtonClick(){
+        page += 1;
+        System.out.println(page);
+
+        updateTableValues(page);
+        return page;
+    }
+
+    public int tableViewPreviousButtonClick(){
+
+        page -= 1;
+        System.out.println(page);
+        updateTableValues(page);
+        return page;
     }
 }
