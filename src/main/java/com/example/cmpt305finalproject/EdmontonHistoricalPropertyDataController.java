@@ -1,6 +1,5 @@
 package com.example.cmpt305finalproject;
 
-
 import com.example.cmpt305finalproject.DAOs.ApiPropertyAssessmentDAO;
 import com.example.cmpt305finalproject.cmpt305.LineGraphSeries;
 import com.example.cmpt305finalproject.cmpt305.TableViewEntry;
@@ -16,6 +15,7 @@ import javafx.scene.control.TableView;
 import org.controlsfx.control.SearchableComboBox;
 import java.net.URL;
 import java.util.*;
+
 
 public class EdmontonHistoricalPropertyDataController implements Initializable {
     private final String currentYearEndpoint = "https://data.edmonton.ca/resource/q7d6-ambg.csv";

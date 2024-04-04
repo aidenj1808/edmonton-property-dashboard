@@ -3,7 +3,6 @@ package com.example.cmpt305finalproject.DAOs;
 import com.example.cmpt305finalproject.cmpt305.TableViewEntry;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -13,8 +12,8 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import static java.lang.Long.parseLong;
+
 
 public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
     private String nbh;

@@ -3,6 +3,7 @@ package com.example.cmpt305finalproject.DAOs;
 import java.util.List;
 import java.util.Map;
 
+
 public interface PropertyAssessmentDAO {
     List<String> getNeighbourhoods();
 
