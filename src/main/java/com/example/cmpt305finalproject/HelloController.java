@@ -73,10 +73,12 @@ public class HelloController implements Initializable {
     private Label tableViewPageLabel;
 
     private int page = 0;
+    private int pageSize;
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        pageSize = 100;
         currentYearDAO = new ApiPropertyAssessmentDAO(currentYearEndpoint);
         historicalDAO = new ApiPropertyAssessmentDAO(historicalEndpoint);
 
@@ -144,6 +146,7 @@ public class HelloController implements Initializable {
         page = 0;
         setTableViewPageLabel();
         updateTableValues(0);
+        updateTableTitle();
     }
 
     public void clearButtonClick() {
@@ -151,20 +154,30 @@ public class HelloController implements Initializable {
         lineChart.setTitle(null);
         tableViewPageLabel.setText("No Pages");
         propertyTable.getItems().clear();
+        tableViewTitle.setText("");
     }
 
     public void updateTableValues(int page) {
         String assessmentClass = assessmentClassesCB.getValue();
         String neighbourhood = neighbourhoodsCB.getValue();
 
-        ObservableList<TableViewEntry> data = historicalDAO.getTablePage(neighbourhood, assessmentClass, page);
+        ObservableList<TableViewEntry> data = historicalDAO.getTablePage(neighbourhood, assessmentClass, page, pageSize);
         propertyTable.setItems(data);
     }
 
+    private void updateTableTitle() {
+        String assessmentClass = assessmentClassesCB.getValue();
+        String neighbourhood = neighbourhoodsCB.getValue();
+
+        tableViewTitle.setText(assessmentClass + " Property Assessments in " + neighbourhood);
+    }
+
     public int tableViewNextButtonClick(){
-        page += 1;
-        updateTableValues(page);
-        setTableViewPageLabel();
+        if (propertyTable.getItems().size() >= pageSize) {
+            page += 1;
+            setTableViewPageLabel();
+            updateTableValues(page);
+        }
         return page;
     }
 
