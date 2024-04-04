@@ -12,6 +12,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 import org.controlsfx.control.SearchableComboBox;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -46,6 +47,9 @@ public class HelloController implements Initializable {
         //List<String> neighbourhoods = propertyAssessmentDAO.getNeighbourhoods();
         List<String> historicalNeighbourhoods = historicalPropertyAssessmentDAO.getNeighbourhoods();
         neighbourhoodsCB.getItems().setAll(historicalNeighbourhoods);
+
+        List<String> seriesTypes = List.of("Sum", "Average", "Average without outliers", "Median");
+        seriesCB.getItems().setAll(seriesTypes);
     }
 
     public void generateGraphClick() {
