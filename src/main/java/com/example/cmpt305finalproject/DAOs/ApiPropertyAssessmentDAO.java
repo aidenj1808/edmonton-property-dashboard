@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 import static java.lang.Long.parseLong;
 
-public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
+public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
     private String nbh;
     private String endpoint; // https://data.edmonton.ca/resource/q7d6-ambg.csv
 
@@ -47,10 +47,10 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
             HttpResponse<String> response = fetchData("Select* limit 1");
 
             return Arrays.stream(Arrays.stream(response.body().split("\n"))
-                    .map(x -> x.replace("\"", ""))
-                    .toList()
-                    .getFirst()
-                    .split(","))
+                            .map(x -> x.replace("\"", ""))
+                            .toList()
+                            .getFirst()
+                            .split(","))
                     .toList();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -176,19 +176,29 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
 
         return allData;
     }
-    private long getMedian(List<Long> assessmentValues){
+
+    private long getMedian(List<Long> assessmentValues) {
         int size = assessmentValues.size();
         // even
-        if ((size % 2) == 0){
-            return((assessmentValues.get((size /2) -1)) + assessmentValues.get(size /2) /2);
+        if ((size % 2) == 0) {
+            return ((assessmentValues.get((size / 2) - 1)) + assessmentValues.get(size / 2) / 2);
         }
         // odd
-        else{
-            return (assessmentValues.get(size/2));
+        else {
+            return (assessmentValues.get(size / 2));
         }
     }
-    public long getYearAssessedValueMedian(String neighbourhood, String assessmentClass, int year) {
-        List<Long> assessmentValues = getValuesByYear(neighbourhood, assessmentClass, year);
-        return getMedian(assessmentValues);
+
+    public Map<String, Long> getYearAssessedValueMedian(String neighbourhood, String assessmentClass) {
+        Map<String, Long> out = new HashMap<>();
+        String query = "select distinct assessment_year";
+        List<String> years = getFormattedDataColumn(query);
+
+        for (String year : years) {
+            List<Long> values = getValuesByYear(neighbourhood, assessmentClass, Integer.parseInt(year));
+            long median = getMedian(values);
+            out.put(year, median);
+        }
+        return out;
     }
 }
