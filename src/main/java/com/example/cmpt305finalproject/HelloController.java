@@ -3,6 +3,7 @@ package com.example.cmpt305finalproject;
 
 import com.example.cmpt305finalproject.DAOs.ApiPropertyAssessmentDAO;
 import com.example.cmpt305finalproject.cmpt305.AssessValueYearMap;
+import com.example.cmpt305finalproject.cmpt305.DataSeries;
 import com.example.cmpt305finalproject.cmpt305.LineGraphSeries;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,6 +19,11 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 public class HelloController implements Initializable {
+    private final String currentYearEndpoint = "https://data.edmonton.ca/resource/q7d6-ambg.csv";
+    private final String historicalEndpoint = "https://data.edmonton.ca/resource/qi6a-xuwt.csv";
+    private ApiPropertyAssessmentDAO currentYearDAO;
+    private ApiPropertyAssessmentDAO historicalDAO;
+
     @FXML
     private ComboBox<String> assessmentClassesCB;
 
@@ -35,17 +41,15 @@ public class HelloController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        ApiPropertyAssessmentDAO propertyAssessmentDAO =
-                new ApiPropertyAssessmentDAO("https://data.edmonton.ca/resource/q7d6-ambg.csv");
-        ApiPropertyAssessmentDAO historicalPropertyAssessmentDAO =
-                new ApiPropertyAssessmentDAO("https://data.edmonton.ca/resource/qi6a-xuwt.csv");
+        currentYearDAO = new ApiPropertyAssessmentDAO(currentYearEndpoint);
+        historicalDAO = new ApiPropertyAssessmentDAO(historicalEndpoint);
 
         //List<String> assessmentClasses = propertyAssessmentDAO.getAssessmentClasses();
-        List<String> historicalAssessmentClasses = historicalPropertyAssessmentDAO.getAssessmentClasses();
+        List<String> historicalAssessmentClasses = historicalDAO.getAssessmentClasses();
         assessmentClassesCB.getItems().setAll(historicalAssessmentClasses);
 
         //List<String> neighbourhoods = propertyAssessmentDAO.getNeighbourhoods();
-        List<String> historicalNeighbourhoods = historicalPropertyAssessmentDAO.getNeighbourhoods();
+        List<String> historicalNeighbourhoods = historicalDAO.getNeighbourhoods();
         neighbourhoodsCB.getItems().setAll(historicalNeighbourhoods);
 
         List<String> seriesTypes = List.of("Sum", "Average", "Average without outliers", "Median");
@@ -61,9 +65,7 @@ public class HelloController implements Initializable {
     }
 
     private void generateSumGraph(String neighbourhood, String assessmentClass) {
-        ApiPropertyAssessmentDAO paDAO =
-                new ApiPropertyAssessmentDAO("https://data.edmonton.ca/resource/qi6a-xuwt.csv");
-        Map<String, Long> sumData = paDAO.getYearAssessedValueSum(neighbourhood, assessmentClass);
+        Map<String, Long> sumData = historicalDAO.getYearAssessedValueSum(neighbourhood, assessmentClass);
 
         LineGraphSeries lineGraphSeries = new LineGraphSeries(sumData);
 
