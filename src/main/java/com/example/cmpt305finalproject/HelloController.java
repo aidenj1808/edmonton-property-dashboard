@@ -70,6 +70,7 @@ public class HelloController implements Initializable {
     @FXML
     private LineChart<String, Long> lineChart;
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         currentYearDAO = new ApiPropertyAssessmentDAO(currentYearEndpoint);
@@ -138,5 +139,13 @@ public class HelloController implements Initializable {
 
         ObservableList<TableViewEntry> data = historicalDAO.getTablePage(neighbourhood, assessmentClass, page);
         propertyTableView.setItems(data);
+    }
+
+    public void tableViewNextButtonClick(){
+
+    }
+
+    public void tableViewPreviousButtonClick(){
+
     }
 }
