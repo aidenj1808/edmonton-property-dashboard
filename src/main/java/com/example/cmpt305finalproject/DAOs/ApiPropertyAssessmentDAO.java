@@ -241,16 +241,15 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
         return out;
     }
 
-    public ObservableList<TableViewEntry> getTablePage(String neighbourhood, String assessmentClass, int page) {
-        int limit = 100;
-        int offset = limit * page;
+    public ObservableList<TableViewEntry> getTablePage(String neighbourhood, String assessmentClass, int page, int pageSize) {
+        int offset = pageSize * page;
         String query = "select account_number, assessment_year, assessed_value, suite, house_number, street_name, year_built, lot_size, garage " +
                 "where neighbourhood_name = '" + neighbourhood + "' " +
                 "and mill_class_1 = '" + assessmentClass + "' " +
                 "and tax_class_pct_1 = '100' " +
                 "and assessed_value != 0 " +
                 "order by assessed_value ASC " +
-                "limit " + limit +
+                "limit " + pageSize +
                 "offset " + offset;
 
         List<String> data = getFormattedDataColumn(query);
@@ -267,7 +266,7 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
 
             int yearBuilt;
             try {
-                yearBuilt = Integer.parseInt(values[6]); // can't handle null, fix when back
+                yearBuilt = Integer.parseInt(values[6]);
             } catch (NumberFormatException e) {
                 yearBuilt = -1;
             }

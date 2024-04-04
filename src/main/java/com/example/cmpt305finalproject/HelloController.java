@@ -70,11 +70,16 @@ public class HelloController implements Initializable {
     @FXML
     private LineChart<String, Long> lineChart;
 
+    @FXML
+    private Label tableViewPageLabel;
+
     private int page = 0;
+    private int pageSize;
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        pageSize = 100;
         currentYearDAO = new ApiPropertyAssessmentDAO(currentYearEndpoint);
         historicalDAO = new ApiPropertyAssessmentDAO(historicalEndpoint);
 
@@ -145,39 +150,58 @@ public class HelloController implements Initializable {
 
     public void generatePropertiesTableButtonClick() {
         page = 0;
-        System.out.println(page);
-
+        setTableViewPageLabel();
         updateTableValues(0);
+        updateTableTitle();
     }
 
     public void clearButtonClick() {
         lineChart.getData().clear();
         lineChart.setTitle(null);
-        propertyTable.getItems().clear();
         this.currentSeries.clear();
+        tableViewPageLabel.setText("No Pages");
+        propertyTable.getItems().clear();
+        tableViewTitle.setText("");
     }
 
     public void updateTableValues(int page) {
         String assessmentClass = assessmentClassesCB.getValue();
         String neighbourhood = neighbourhoodsCB.getValue();
 
-        ObservableList<TableViewEntry> data = historicalDAO.getTablePage(neighbourhood, assessmentClass, page);
+        ObservableList<TableViewEntry> data = historicalDAO.getTablePage(neighbourhood, assessmentClass, page, pageSize);
         propertyTable.setItems(data);
     }
 
-    public int tableViewNextButtonClick(){
-        page += 1;
-        System.out.println(page);
+    private void updateTableTitle() {
+        String assessmentClass = assessmentClassesCB.getValue();
+        String neighbourhood = neighbourhoodsCB.getValue();
 
-        updateTableValues(page);
+        tableViewTitle.setText(assessmentClass + " Property Assessments in " + neighbourhood);
+    }
+
+    public int tableViewNextButtonClick(){
+        if (propertyTable.getItems().size() >= pageSize) {
+            page += 1;
+            setTableViewPageLabel();
+            updateTableValues(page);
+        }
         return page;
     }
 
     public int tableViewPreviousButtonClick(){
-
-        page -= 1;
-        System.out.println(page);
-        updateTableValues(page);
+        if (page == 0){
+            return page;
+        }
+        else {
+            page -= 1;
+            updateTableValues(page);
+        }
+        setTableViewPageLabel();
         return page;
+    }
+
+    public void setTableViewPageLabel(){
+        String newText = "Page: " + (page+1); // add out of page size
+        tableViewPageLabel.setText(newText);
     }
 }
