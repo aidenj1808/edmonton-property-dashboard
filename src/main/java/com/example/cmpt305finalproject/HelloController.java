@@ -23,6 +23,7 @@ public class HelloController implements Initializable {
     private final String historicalEndpoint = "https://data.edmonton.ca/resource/qi6a-xuwt.csv";
     private ApiPropertyAssessmentDAO currentYearDAO;
     private ApiPropertyAssessmentDAO historicalDAO;
+    private List<String> currentSeries = new ArrayList<>();
 
     @FXML
     private ComboBox<String> assessmentClassesCB;
@@ -104,10 +105,15 @@ public class HelloController implements Initializable {
     }
 
     private void generateGraph(String neighbourhood, String assessmentClass, String series) {
+        if (this.currentSeries.contains(series)) {
+            // Could do some kind of pop notification, silent return do nothing for now.
+            return;
+        }
 
         Map<String, Long> data = getSeriesData(neighbourhood, assessmentClass, series);
-
         LineGraphSeries lineGraphSeries = new LineGraphSeries(data);
+        this.currentSeries.add(series);
+
         if (lineChart.getTitle() == null) {
             lineChart.setTitle("Historical Data - Assessed Values vs Year For " + series);
         } else {
@@ -147,8 +153,8 @@ public class HelloController implements Initializable {
     public void clearButtonClick() {
         lineChart.getData().clear();
         lineChart.setTitle(null);
-
         propertyTable.getItems().clear();
+        this.currentSeries.clear();
     }
 
     public void updateTableValues(int page) {
