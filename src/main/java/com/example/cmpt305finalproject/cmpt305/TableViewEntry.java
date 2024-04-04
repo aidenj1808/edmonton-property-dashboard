@@ -84,8 +84,12 @@ public class TableViewEntry {
         streetName.set(value);
     }
 
-    public int getYearBuilt() {
-        return yearBuilt.get();
+    public String getYearBuilt() {      // converts to a string to handle unknown values
+        int value = yearBuilt.get();
+        if (value == -1) {
+            return "unknown";
+        }
+        return "" + value;
     }
 
     public void setYearBuilt(int value) {

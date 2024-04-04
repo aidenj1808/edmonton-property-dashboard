@@ -54,7 +54,7 @@ public class HelloController implements Initializable {
     private TableColumn<TableViewEntry, String> streetNameColumn;
 
     @FXML
-    private TableColumn<TableViewEntry, Integer> yearBuiltColumn;
+    private TableColumn<TableViewEntry, String> yearBuiltColumn;
 
     @FXML
     private TableColumn<TableViewEntry, String> lotSizeColumn;
@@ -91,7 +91,7 @@ public class HelloController implements Initializable {
         suiteColumn.setCellValueFactory(new PropertyValueFactory<TableViewEntry, String>("suite"));
         houseNumberColumn.setCellValueFactory(new PropertyValueFactory<TableViewEntry, String>("houseNumber"));
         streetNameColumn.setCellValueFactory(new PropertyValueFactory<TableViewEntry, String>("streetName"));
-        yearBuiltColumn.setCellValueFactory(new PropertyValueFactory<TableViewEntry, Integer>("yearBuilt"));
+        yearBuiltColumn.setCellValueFactory(new PropertyValueFactory<TableViewEntry, String>("yearBuilt"));
         lotSizeColumn.setCellValueFactory(new PropertyValueFactory<TableViewEntry, String>("lotSize"));
         garageColumn.setCellValueFactory(new PropertyValueFactory<TableViewEntry, String>("garage"));
     }

@@ -269,7 +269,7 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
             try {
                 yearBuilt = Integer.parseInt(values[6]); // can't handle null, fix when back
             } catch (NumberFormatException e) {
-                yearBuilt = 0;
+                yearBuilt = -1;
             }
 
             String lotSize = values[7];
