@@ -142,6 +142,7 @@ public class HelloController implements Initializable {
         System.out.println(page);
 
         updateTableValues(0);
+        updateTableTitle();
     }
 
     public void clearButtonClick() {
@@ -149,6 +150,7 @@ public class HelloController implements Initializable {
         lineChart.setTitle(null);
 
         propertyTable.getItems().clear();
+        tableViewTitle.setText("");
     }
 
     public void updateTableValues(int page) {
@@ -157,6 +159,13 @@ public class HelloController implements Initializable {
 
         ObservableList<TableViewEntry> data = historicalDAO.getTablePage(neighbourhood, assessmentClass, page);
         propertyTable.setItems(data);
+    }
+
+    private void updateTableTitle() {
+        String assessmentClass = assessmentClassesCB.getValue();
+        String neighbourhood = neighbourhoodsCB.getValue();
+
+        tableViewTitle.setText(assessmentClass + " Property Assessments in " + neighbourhood);
     }
 
     public int tableViewNextButtonClick(){
