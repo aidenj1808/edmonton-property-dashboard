@@ -37,32 +37,32 @@ public class HelloController implements Initializable {
     @FXML
     private Label tableViewTitle;
 
-    @FXML
-    private TableColumn<TableViewEntry, String> accountNumberColumn;
-
-    @FXML
-    private TableColumn<TableViewEntry, String> assessmentYearColumn;
-
-    @FXML
-    private TableColumn<TableViewEntry, String> assessedValueColumn;
-
-    @FXML
-    private TableColumn<TableViewEntry, String> suiteColumn;
-
-    @FXML
-    private TableColumn<TableViewEntry, String> houseNumber;
-
-    @FXML
-    private TableColumn<TableViewEntry, String> streetNameColumn;
-
-    @FXML
-    private TableColumn<TableViewEntry, String> yearBuiltColumn;
-
-    @FXML
-    private TableColumn<TableViewEntry, String> lotSizeColumn;
-
-    @FXML
-    private TableColumn<TableViewEntry, String> garageColumn;
+//    @FXML
+//    private TableColumn<TableViewEntry, String> accountNumberColumn;
+//
+//    @FXML
+//    private TableColumn<TableViewEntry, String> assessmentYearColumn;
+//
+//    @FXML
+//    private TableColumn<TableViewEntry, String> assessedValueColumn;
+//
+//    @FXML
+//    private TableColumn<TableViewEntry, String> suiteColumn;
+//
+//    @FXML
+//    private TableColumn<TableViewEntry, String> houseNumber;
+//
+//    @FXML
+//    private TableColumn<TableViewEntry, String> streetNameColumn;
+//
+//    @FXML
+//    private TableColumn<TableViewEntry, String> yearBuiltColumn;
+//
+//    @FXML
+//    private TableColumn<TableViewEntry, String> lotSizeColumn;
+//
+//    @FXML
+//    private TableColumn<TableViewEntry, String> garageColumn;
 
     @FXML
     private LineChart<String, Long> lineChart;
