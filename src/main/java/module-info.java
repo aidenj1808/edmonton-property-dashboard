@@ -7,6 +7,7 @@ module com.example.cmpt305finalproject {
     requires org.controlsfx.controls;
     requires java.net.http;
 
-    opens com.example.cmpt305finalproject to javafx.fxml;
+    opens com.example.cmpt305finalproject to javafx.fxml, javafx.base;
+    opens com.example.cmpt305finalproject.cmpt305 to javafx.base;
     exports com.example.cmpt305finalproject;
 }

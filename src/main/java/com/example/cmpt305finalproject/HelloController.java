@@ -8,10 +8,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import org.controlsfx.control.SearchableComboBox;
 import java.net.URL;
 import java.util.*;
@@ -44,13 +42,13 @@ public class HelloController implements Initializable {
     private TableColumn<TableViewEntry, Integer> assessmentYearColumn;
 
     @FXML
-    private TableColumn<TableViewEntry, Long> assessedValueColumn;
+    private TableColumn<TableViewEntry, Long> assessmentValueColumn;
 
     @FXML
     private TableColumn<TableViewEntry, String> suiteColumn;
 
     @FXML
-    private TableColumn<TableViewEntry, String> houseNumber;
+    private TableColumn<TableViewEntry, String> houseNumberColumn;
 
     @FXML
     private TableColumn<TableViewEntry, String> streetNameColumn;
@@ -82,6 +80,20 @@ public class HelloController implements Initializable {
 
         List<String> seriesTypes = List.of("Sum", "Average", "Average without outliers", "Median");
         seriesCB.getItems().setAll(seriesTypes);
+
+        setupTableColumns();
+    }
+
+    private void setupTableColumns() {
+        accountNumberColumn.setCellValueFactory(new PropertyValueFactory<TableViewEntry, Integer>("accountNum"));
+        assessmentYearColumn.setCellValueFactory(new PropertyValueFactory<TableViewEntry, Integer>("assessmentYear"));
+        assessmentValueColumn.setCellValueFactory(new PropertyValueFactory<TableViewEntry, Long>("assessedValue"));
+        suiteColumn.setCellValueFactory(new PropertyValueFactory<TableViewEntry, String>("suite"));
+        houseNumberColumn.setCellValueFactory(new PropertyValueFactory<TableViewEntry, String>("houseNumber"));
+        streetNameColumn.setCellValueFactory(new PropertyValueFactory<TableViewEntry, String>("streetName"));
+        yearBuiltColumn.setCellValueFactory(new PropertyValueFactory<TableViewEntry, Integer>("yearBuilt"));
+        lotSizeColumn.setCellValueFactory(new PropertyValueFactory<TableViewEntry, String>("lotSize"));
+        garageColumn.setCellValueFactory(new PropertyValueFactory<TableViewEntry, String>("garage"));
     }
 
     private void generateGraph(String neighbourhood, String assessmentClass, String series) {
