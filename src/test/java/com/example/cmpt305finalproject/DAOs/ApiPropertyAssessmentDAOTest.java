@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -63,4 +64,13 @@ class ApiPropertyAssessmentDAOTest {
         List<Long> data = testClassHistorical.getValuesByYear(neighbourhood, assessmentClass, year);
         System.out.println(data);
     }
+    @Test
+    void testYearAssessedValueMedian() {
+        String neighbourhood = "DOWNTOWN";
+        String assessmentClass = "COMMERCIAL";
+
+        Map<String, Long> yearAssessedValueMedian = testClassHistorical.getYearAssessedValueMedian(neighbourhood, assessmentClass);
+        System.out.println(yearAssessedValueMedian);
+    }
+
 }
