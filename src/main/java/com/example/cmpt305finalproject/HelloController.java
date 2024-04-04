@@ -13,10 +13,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 import org.controlsfx.control.SearchableComboBox;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class HelloController implements Initializable {
     private final String currentYearEndpoint = "https://data.edmonton.ca/resource/q7d6-ambg.csv";
@@ -60,28 +57,27 @@ public class HelloController implements Initializable {
         lineChart.getData().clear();
         String assessmentClass = assessmentClassesCB.getValue();
         String neighbourhood = neighbourhoodsCB.getValue();
+        String series = seriesCB.getValue();
 
-        generateAvgGraph(neighbourhood, assessmentClass);
+        generateGraph(neighbourhood, assessmentClass, series);
     }
 
-    private void generateSumGraph(String neighbourhood, String assessmentClass) {
-        Map<String, Long> sumData = historicalDAO.getYearAssessedValueSum(neighbourhood, assessmentClass);
+    private void generateGraph(String neighbourhood, String assessmentClass, String series) {
+        Map<String, Long> data = getSeriesData(neighbourhood, assessmentClass, series);
 
-        LineGraphSeries lineGraphSeries = new LineGraphSeries(sumData);
+        LineGraphSeries lineGraphSeries = new LineGraphSeries(data);
 
-        lineChart.setTitle("Historical Data - Sum of Assessed Values vs Year");
+        lineChart.setTitle("Historical Data - " + series + " of Assessed Values vs Year");
         lineChart.setLegendVisible(false);
         lineChart.getData().add(lineGraphSeries.getSeries());
     }
 
-    private void generateAvgGraph(String neighbourhood, String assessmentClass) {
-        Map<String, Long> avgData = historicalDAO.getYearAssessedValueAvg(neighbourhood, assessmentClass);
-
-        LineGraphSeries lineGraphSeries = new LineGraphSeries(avgData);
-
-        lineChart.setTitle("Historical Data - Avg of Assessed Values vs Year");
-        lineChart.setLegendVisible(false);
-        lineChart.getData().add(lineGraphSeries.getSeries());
+    private Map<String, Long> getSeriesData(String neighbourhood, String assessmentClass, String series) throws IllegalArgumentException {
+        return switch (series) {
+            case "Sum" -> historicalDAO.getYearAssessedValueSum(neighbourhood, assessmentClass);
+            case "Average" -> historicalDAO.getYearAssessedValueAvg(neighbourhood, assessmentClass);
+            default -> throw new IllegalArgumentException("Invalid graph series selected");
+        };
     }
 
     public void generateSummaryClick() {
