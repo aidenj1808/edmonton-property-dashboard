@@ -64,6 +64,7 @@ class ApiPropertyAssessmentDAOTest {
         List<Long> data = testClassHistorical.getValuesByYear(neighbourhood, assessmentClass, year);
         System.out.println(data);
     }
+
     @Test
     void testYearAssessedValueMedian() {
         String neighbourhood = "DOWNTOWN";
@@ -71,6 +72,16 @@ class ApiPropertyAssessmentDAOTest {
 
         Map<String, Long> yearAssessedValueMedian = testClassHistorical.getYearAssessedValueMedian(neighbourhood, assessmentClass);
         System.out.println(yearAssessedValueMedian);
+    }
+
+    @Test
+    void testRemoveOutliers() {
+        String assessmentClass = "COMMERCIAL";
+        String neighbourhood = "ABBOTTSFIELD";
+        int year = 2022;
+
+        List<Long> data = testClassHistorical.getValuesByYearNoOutliers(neighbourhood, assessmentClass, year);
+        System.out.println(data);
     }
 
 }

@@ -13,4 +13,5 @@ public interface PropertyAssessmentDAO {
     Map<String, Long> getYearAssessedValueMedian(String neighbourhood, String assessmentClass);
 
 
+    List<Long> getValuesByYearNoOutliers(String neighbourhood, String assessmentClass, int year);
 }
