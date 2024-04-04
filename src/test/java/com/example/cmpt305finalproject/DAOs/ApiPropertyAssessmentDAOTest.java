@@ -80,7 +80,9 @@ class ApiPropertyAssessmentDAOTest {
         String neighbourhood = "ABBOTTSFIELD";
         int year = 2022;
 
+        Map<String, Long> rawData = testClassHistorical.getYearAssessedValueAvg(neighbourhood, assessmentClass);
         Map<String, Long> data = testClassHistorical.getYearAvgNoOutliers(neighbourhood, assessmentClass);
+        System.out.println(rawData);
         System.out.println(data);
     }
 
