@@ -1,24 +1,26 @@
 package com.example.cmpt305finalproject.DAOs;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ApiPropertyAssessmentDAOTest {
-    PropertyAssessmentDAO testClass;
+    PropertyAssessmentDAO testClassCurrent;
+    PropertyAssessmentDAO testClassHistorical;
 
     @BeforeEach
     void setUp() {
         String currentDataEndpoint = "https://data.edmonton.ca/resource/q7d6-ambg.csv";
-        String historicalDataEndpoint = "https://data.edmonton.ca/api/odata/v4/qi6a-xuwt.csv";
+        String historicalDataEndpoint = "https://data.edmonton.ca/resource/qi6a-xuwt.csv";
 
-        testClass = new ApiPropertyAssessmentDAO(currentDataEndpoint);
+        testClassCurrent = new ApiPropertyAssessmentDAO(currentDataEndpoint);
+        testClassHistorical = new ApiPropertyAssessmentDAO(historicalDataEndpoint);
+
     }
 
     @AfterEach
@@ -27,11 +29,14 @@ class ApiPropertyAssessmentDAOTest {
 
     @Test
     void getNeighbourhoods() {
-        List<String> neighbourhoods = testClass.getNeighbourhoods();
-//        neighbourhoods.forEach(x -> System.out.println(x));
+        List<String> neighbourhoods = testClassCurrent.getNeighbourhoods();
 
         assertEquals("ABBOTTSFIELD", neighbourhoods.getFirst());
         assertEquals("HAZELDEAN", neighbourhoods.get(166));
+        assertEquals("YOUNGSTOWN INDUSTRIAL", neighbourhoods.getLast());
+
+        neighbourhoods = testClassHistorical.getNeighbourhoods();
+        assertEquals("ABBOTTSFIELD", neighbourhoods.getFirst());
         assertEquals("YOUNGSTOWN INDUSTRIAL", neighbourhoods.getLast());
     }
 
@@ -45,12 +50,40 @@ class ApiPropertyAssessmentDAOTest {
                 "RESIDENTIAL"
         );
 
-        List<String> classes = testClass.getAssessmentClasses();
+        List<String> classes = testClassCurrent.getAssessmentClasses();
         classes.forEach(System.out::println);
 
     }
 
     @Test
-    void getNeighbourhoodHistoricalData() {
+    void getValuesByYear() {
+        String assessmentClass = "COMMERCIAL";
+        String neighbourhood = "ABBOTTSFIELD";
+        int year = 2022;
+
+        List<Long> data = testClassHistorical.getValuesByYear(neighbourhood, assessmentClass, year);
+        System.out.println(data);
     }
+
+    @Test
+    void testYearAssessedValueMedian() {
+        String neighbourhood = "DOWNTOWN";
+        String assessmentClass = "COMMERCIAL";
+
+        Map<String, Long> yearAssessedValueMedian = testClassHistorical.getYearAssessedValueMedian(neighbourhood, assessmentClass);
+        System.out.println(yearAssessedValueMedian);
+    }
+
+    @Test
+    void testRemoveOutliersAvg() {
+        String assessmentClass = "COMMERCIAL";
+        String neighbourhood = "ABBOTTSFIELD";
+        int year = 2022;
+
+        Map<String, Long> rawData = testClassHistorical.getYearAssessedValueAvg(neighbourhood, assessmentClass);
+        Map<String, Long> data = testClassHistorical.getYearAvgNoOutliers(neighbourhood, assessmentClass);
+        System.out.println(rawData);
+        System.out.println(data);
+    }
+
 }

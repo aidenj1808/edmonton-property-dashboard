@@ -10,100 +10,192 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cmpt305finalproject.HelloController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="922.0" prefWidth="1305.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cmpt305finalproject.HelloController">
    <top>
-      <MenuBar BorderPane.alignment="CENTER">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-   </top>
-   <left>
       <VBox BorderPane.alignment="CENTER">
          <children>
-            <Label text="Assessment Class:">
-               <VBox.margin>
-                  <Insets left="20.0" top="20.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Label>
-            <ComboBox fx:id="assessmentClassesCB" prefHeight="26.0" prefWidth="174.0" promptText="Select Assessment Class">
-               <VBox.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </VBox.margin>
-            </ComboBox>
-            <Label layoutX="30.0" layoutY="30.0" text="Neighbourhood:">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-               <VBox.margin>
-                  <Insets left="20.0" />
-               </VBox.margin>
-            </Label>
-            <SearchableComboBox fx:id="neighbourhoodsCB" prefHeight="26.0" prefWidth="174.0" promptText="Select Neighbourhood">
-               <VBox.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </VBox.margin>
-            </SearchableComboBox>
-            <Button alignment="CENTER" mnemonicParsing="false" onAction="#generateGraphClick" text="Generate Graph" textAlignment="CENTER">
-               <VBox.margin>
-                  <Insets bottom="20.0" left="50.0" right="20.0" top="20.0" />
-               </VBox.margin>
-            </Button>
-         </children>
-         <padding>
-            <Insets right="100.0" />
-         </padding>
-      </VBox>
-   </left>
-   <center>
-      <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
-        <tabs>
-          <Tab text="Graph">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+            <MenuBar>
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Close" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Delete" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <HBox maxHeight="150.0" minHeight="20.0" prefHeight="105.0" prefWidth="930.0" spacing="10.0">
+               <children>
+                  <VBox>
                      <children>
-                        <LineChart fx:id="lineChart" animated="false" layoutX="-4.0" layoutY="-6.0" prefHeight="345.6" prefWidth="385.6" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <xAxis>
-                            <CategoryAxis side="BOTTOM" />
-                          </xAxis>
-                          <yAxis>
-                            <NumberAxis side="LEFT" />
-                          </yAxis>
-                        </LineChart>
-                     </children></AnchorPane>
-            </content>
-          </Tab>
-          <Tab text="Map">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-            </content>
-          </Tab>
-        </tabs>
-      </TabPane>
+                        <Label text="Assessment Class:">
+                           <VBox.margin>
+                              <Insets left="10.0" top="20.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="assessmentClassesCB" promptText="Select Assessment Class">
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="10.0" top="9.0" />
+                           </VBox.margin>
+                        </ComboBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+                  <VBox>
+                     <children>
+                        <Label text="Neighbourhood:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="19.0" />
+                           </VBox.margin>
+                        </Label>
+                        <SearchableComboBox fx:id="neighbourhoodsCB" promptText="Select Neighbourhood">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </SearchableComboBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+                  <VBox>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                     <children>
+                        <Label text="Series:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                        </Label>
+                        <ComboBox fx:id="seriesCB" promptText="Select Series">
+                           <VBox.margin>
+                              <Insets top="9.0" />
+                           </VBox.margin>
+                        </ComboBox>
+                     </children>
+                  </VBox>
+                  <VBox>
+                     <children>
+                        <Button fx:id="graphSeriesButton" alignment="CENTER" mnemonicParsing="false" onAction="#graphSeriesButtonClick" text="Graph Series" textAlignment="CENTER">
+                           <VBox.margin>
+                              <Insets top="46.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+                  <VBox>
+                     <children>
+                        <Button fx:id="generatePropertiesTableButton" alignment="CENTER" mnemonicParsing="false" onAction="#generatePropertiesTableButtonClick" text="Generate Properties Table" textAlignment="CENTER">
+                           <VBox.margin>
+                              <Insets top="46.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Button fx:id="clearAllButton" mnemonicParsing="false" onAction="#clearButtonClick" text="CLEAR ALL">
+                           <VBox.margin>
+                              <Insets top="46.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+      </VBox>
+   </top>
+   <center>
+      <HBox prefHeight="536.0" prefWidth="801.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox prefHeight="536.0" prefWidth="441.0" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <children>
+                  <LineChart fx:id="lineChart" animated="false" VBox.vgrow="ALWAYS">
+                    <xAxis>
+                      <CategoryAxis side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis side="LEFT" />
+                    </yAxis>
+                  </LineChart>
+               </children>
+               <padding>
+                  <Insets left="10.0" right="10.0" top="20.0" />
+               </padding>
+            </VBox>
+            <VBox prefHeight="536.0" prefWidth="506.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label fx:id="tableViewTitle" alignment="TOP_LEFT" contentDisplay="CENTER" prefHeight="35.0" prefWidth="665.0">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <TableView fx:id="propertyTable" prefWidth="140.0" VBox.vgrow="ALWAYS">
+                     <columns>
+                        <TableColumn maxWidth="100.0" minWidth="-1.0" prefWidth="100.0" text="Account #" />
+                        <TableColumn maxWidth="140.0" minWidth="-1.0" prefWidth="140.0" text="Assessment Year" />
+                        <TableColumn maxWidth="140.0" minWidth="-1.0" prefWidth="140.0" text="Assessment Value ($)" />
+                        <TableColumn maxWidth="80.0" minWidth="-1.0" text="Suite" />
+                        <TableColumn maxWidth="100.0" minWidth="-1.0" prefWidth="100.0" text="House #" />
+                        <TableColumn maxWidth="100.0" minWidth="-1.0" prefWidth="100.0" text="Street Name" />
+                        <TableColumn maxWidth="100.0" minWidth="-1.0" prefWidth="100.0" text="Year Built" />
+                        <TableColumn maxWidth="140.0" minWidth="-1.0" prefWidth="140.0" text="Lot Size (m2)" />
+                        <TableColumn maxWidth="50.0" minWidth="-1.0" prefWidth="50.0" text="Garage" />
+                     </columns>
+                  </TableView>
+               </children>
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding></VBox>
+         </children>
+      </HBox>
    </center>
 </BorderPane>
