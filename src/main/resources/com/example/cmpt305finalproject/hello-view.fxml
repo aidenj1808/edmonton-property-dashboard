@@ -18,7 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="922.0" prefWidth="1305.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cmpt305finalproject.HelloController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="649.0" prefWidth="882.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cmpt305finalproject.HelloController">
    <top>
       <VBox BorderPane.alignment="CENTER">
          <children>
@@ -165,7 +165,7 @@
                   </LineChart>
                </children>
                <padding>
-                  <Insets left="10.0" right="10.0" top="20.0" />
+                  <Insets bottom="20.0" left="10.0" right="10.0" top="20.0" />
                </padding>
             </VBox>
             <VBox prefHeight="536.0" prefWidth="506.0" HBox.hgrow="ALWAYS">
@@ -180,20 +180,20 @@
                   </Label>
                   <TableView fx:id="propertyTable" prefWidth="140.0" VBox.vgrow="ALWAYS">
                      <columns>
-                        <TableColumn fx:id="accountNumberColumn" maxWidth="100.0" minWidth="-1.0" prefWidth="100.0" text="Account #" />
-                        <TableColumn fx:id="assessmentYearColumn" maxWidth="140.0" minWidth="-1.0" prefWidth="140.0" text="Assessment Year" />
+                        <TableColumn fx:id="accountNumberColumn" maxWidth="80.0" minWidth="-1.0" text="Account #" />
+                        <TableColumn fx:id="assessmentYearColumn" maxWidth="110.0" minWidth="-1.0" prefWidth="110.0" text="Assessment Year" />
                         <TableColumn fx:id="assessmentValueColumn" maxWidth="140.0" minWidth="-1.0" prefWidth="140.0" text="Assessment Value ($)" />
-                        <TableColumn fx:id="suiteColumn" maxWidth="80.0" minWidth="-1.0" text="Suite" />
-                        <TableColumn fx:id="houseNumberColumn" maxWidth="100.0" minWidth="-1.0" prefWidth="100.0" text="House #" />
-                        <TableColumn fx:id="streetNameColumn" maxWidth="100.0" minWidth="-1.0" prefWidth="100.0" text="Street Name" />
-                        <TableColumn fx:id="yearBuiltColumn" maxWidth="100.0" minWidth="-1.0" prefWidth="100.0" text="Year Built" />
-                        <TableColumn fx:id="lotSizeColumn" maxWidth="140.0" minWidth="-1.0" prefWidth="140.0" text="Lot Size (m2)" />
+                        <TableColumn fx:id="suiteColumn" maxWidth="50.0" minWidth="-1.0" prefWidth="50.0" text="Suite" />
+                        <TableColumn fx:id="houseNumberColumn" maxWidth="70.0" minWidth="-1.0" prefWidth="70.0" text="House #" />
+                        <TableColumn fx:id="streetNameColumn" maxWidth="90.0" minWidth="-1.0" prefWidth="90.0" text="Street Name" />
+                        <TableColumn fx:id="yearBuiltColumn" maxWidth="80.0" minWidth="-1.0" text="Year Built" />
+                        <TableColumn fx:id="lotSizeColumn" maxWidth="100.0" minWidth="-1.0" prefWidth="100.0" text="Lot Size (m2)" />
                         <TableColumn fx:id="garageColumn" maxWidth="50.0" minWidth="-1.0" prefWidth="50.0" text="Garage" />
                      </columns>
                   </TableView>
                </children>
                <padding>
-                  <Insets left="10.0" right="10.0" />
+                  <Insets bottom="40.0" left="10.0" right="10.0" />
                </padding></VBox>
          </children>
       </HBox>
