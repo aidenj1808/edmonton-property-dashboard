@@ -126,5 +126,6 @@ public class HelloController implements Initializable {
 
     public void clearButtonClick() {
         lineChart.getData().clear();
+        lineChart.setTitle(null);
     }
 }
