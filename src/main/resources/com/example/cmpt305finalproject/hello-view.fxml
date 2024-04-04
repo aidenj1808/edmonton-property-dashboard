@@ -10,6 +10,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -17,7 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="666.0" prefWidth="930.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cmpt305finalproject.HelloController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="922.0" prefWidth="1305.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cmpt305finalproject.HelloController">
    <top>
       <VBox BorderPane.alignment="CENTER">
          <children>
@@ -54,7 +55,7 @@
                         </Label>
                         <ComboBox fx:id="assessmentClassesCB" promptText="Select Assessment Class">
                            <VBox.margin>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="9.0" />
+                              <Insets bottom="10.0" left="10.0" top="9.0" />
                            </VBox.margin>
                         </ComboBox>
                      </children>
@@ -87,7 +88,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                      <children>
-                        <Label text="Series">
+                        <Label text="Series:">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -104,7 +105,19 @@
                   </VBox>
                   <VBox>
                      <children>
-                        <Button fx:id="generateSummaryButton" alignment="CENTER" mnemonicParsing="false" onAction="#generateSummaryClick" text="Generate Summary" textAlignment="CENTER">
+                        <Button fx:id="graphSeriesButton" alignment="CENTER" mnemonicParsing="false" onAction="#graphSeriesButtonClick" text="Graph Series" textAlignment="CENTER">
+                           <VBox.margin>
+                              <Insets top="46.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+                  <VBox>
+                     <children>
+                        <Button fx:id="generatePropertiesTableButton" alignment="CENTER" mnemonicParsing="false" onAction="#generatePropertiesTableButtonClick" text="Generate Properties Table" textAlignment="CENTER">
                            <VBox.margin>
                               <Insets top="46.0" />
                            </VBox.margin>
@@ -116,12 +129,15 @@
                   </VBox>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Button fx:id="clearButton" mnemonicParsing="false" onAction="#clearButtonClick" text="CLEAR">
+                        <Button fx:id="clearAllButton" mnemonicParsing="false" onAction="#clearButtonClick" text="CLEAR ALL">
                            <VBox.margin>
-                              <Insets top="56.0" />
+                              <Insets top="46.0" />
                            </VBox.margin>
                         </Button>
                      </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
                   </VBox>
                </children>
             </HBox>
@@ -148,11 +164,37 @@
                     </yAxis>
                   </LineChart>
                </children>
+               <padding>
+                  <Insets left="10.0" right="10.0" top="20.0" />
+               </padding>
             </VBox>
             <VBox prefHeight="536.0" prefWidth="506.0" HBox.hgrow="ALWAYS">
                <children>
-                  <TableView fx:id="propertyTable" VBox.vgrow="ALWAYS" />
-               </children></VBox>
+                  <Label fx:id="tableViewTitle" alignment="TOP_LEFT" contentDisplay="CENTER" prefHeight="35.0" prefWidth="665.0">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <TableView fx:id="propertyTable" prefWidth="140.0" VBox.vgrow="ALWAYS">
+                     <columns>
+                        <TableColumn maxWidth="100.0" minWidth="-1.0" prefWidth="100.0" text="Account #" />
+                        <TableColumn maxWidth="140.0" minWidth="-1.0" prefWidth="140.0" text="Assessment Year" />
+                        <TableColumn maxWidth="140.0" minWidth="-1.0" prefWidth="140.0" text="Assessment Value ($)" />
+                        <TableColumn maxWidth="80.0" minWidth="-1.0" text="Suite" />
+                        <TableColumn maxWidth="100.0" minWidth="-1.0" prefWidth="100.0" text="House #" />
+                        <TableColumn maxWidth="100.0" minWidth="-1.0" prefWidth="100.0" text="Street Name" />
+                        <TableColumn maxWidth="100.0" minWidth="-1.0" prefWidth="100.0" text="Year Built" />
+                        <TableColumn maxWidth="140.0" minWidth="-1.0" prefWidth="140.0" text="Lot Size (m2)" />
+                        <TableColumn maxWidth="50.0" minWidth="-1.0" prefWidth="50.0" text="Garage" />
+                     </columns>
+                  </TableView>
+               </children>
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding></VBox>
          </children>
       </HBox>
    </center>

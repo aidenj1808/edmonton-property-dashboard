@@ -10,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import org.controlsfx.control.SearchableComboBox;
 import java.net.URL;
@@ -32,6 +33,9 @@ public class HelloController implements Initializable {
 
     //@FXML
     //private TableView<ObservableList> propertyTable;
+
+    @FXML
+    private Label tableViewTitle;
 
     @FXML
     private LineChart<String, Long> lineChart;
@@ -82,8 +86,12 @@ public class HelloController implements Initializable {
         };
     }
 
-    public void generateSummaryClick() {
-        generateGraphClick();
+    public void graphSeriesButtonClick() {
+            generateGraphClick();
+    }
+
+    public void generatePropertiesTableButtonClick() {
+        //TODO
     }
 
     public void clearButtonClick() {
