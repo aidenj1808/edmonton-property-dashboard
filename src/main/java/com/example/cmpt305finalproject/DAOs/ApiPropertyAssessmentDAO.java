@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -263,7 +264,14 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
             String suite = values[3];
             String houseNum = values[4];
             String streetName = values[5];
-            int yearBuilt = Integer.parseInt(values[6]); // can't handle null, fix when back
+
+            int yearBuilt;
+            try {
+                yearBuilt = Integer.parseInt(values[6]); // can't handle null, fix when back
+            } catch (NumberFormatException e) {
+                yearBuilt = 0;
+            }
+
             String lotSize = values[7];
             String garage = values[8];
 
