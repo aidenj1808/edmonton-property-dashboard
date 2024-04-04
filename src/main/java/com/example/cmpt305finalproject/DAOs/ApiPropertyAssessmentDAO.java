@@ -176,4 +176,19 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
 
         return allData;
     }
+    private long getMedian(List<Long> assessmentValues){
+        int size = assessmentValues.size();
+        // even
+        if ((size % 2) == 0){
+            return((assessmentValues.get((size /2) -1)) + assessmentValues.get(size /2) /2);
+        }
+        // odd
+        else{
+            return (assessmentValues.get(size/2));
+        }
+    }
+    public long getYearAssessedValueMedian(String neighbourhood, String assessmentClass, int year) {
+        List<Long> assessmentValues = getValuesByYear(neighbourhood, assessmentClass, year);
+        return getMedian(assessmentValues);
+    }
 }
