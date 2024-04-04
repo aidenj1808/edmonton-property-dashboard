@@ -3,11 +3,13 @@ package com.example.cmpt305finalproject;
 
 import com.example.cmpt305finalproject.DAOs.ApiPropertyAssessmentDAO;
 import com.example.cmpt305finalproject.cmpt305.Graphing;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableView;
 import org.controlsfx.control.SearchableComboBox;
 import java.net.URL;
 import java.util.HashMap;
@@ -21,6 +23,12 @@ public class HelloController implements Initializable {
 
     @FXML
     private SearchableComboBox<String> neighbourhoodsCB;
+
+    @FXML
+    private ComboBox<String> seriesCB;
+
+    //@FXML
+    //private TableView<ObservableList> propertyTable;
 
     @FXML
     private LineChart<String, Long> lineChart;
@@ -61,5 +69,13 @@ public class HelloController implements Initializable {
         lineChart.setTitle("Historical Data - Sum of Assessed Values vs Year");
         lineChart.setLegendVisible(false);
         lineChart.getData().add(series);
+    }
+
+    public void generateSummaryClick() {
+        //TODO
+    }
+
+    public void clearClick() {
+        //TODO
     }
 }
