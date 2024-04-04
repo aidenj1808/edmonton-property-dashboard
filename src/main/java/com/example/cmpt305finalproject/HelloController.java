@@ -2,15 +2,12 @@ package com.example.cmpt305finalproject;
 
 
 import com.example.cmpt305finalproject.DAOs.ApiPropertyAssessmentDAO;
-import com.example.cmpt305finalproject.cmpt305.AssessValueYearMap;
-import com.example.cmpt305finalproject.cmpt305.DataSeries;
 import com.example.cmpt305finalproject.cmpt305.LineGraphSeries;
 import com.example.cmpt305finalproject.cmpt305.TableViewEntry;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -35,7 +32,7 @@ public class HelloController implements Initializable {
     private ComboBox<String> seriesCB;
 
     @FXML
-    private TableView<TableViewEntry> propertyTableView;
+    private TableView<TableViewEntry> propertyTable;
 
     @FXML
     private Label tableViewTitle;
@@ -141,7 +138,7 @@ public class HelloController implements Initializable {
         String neighbourhood = neighbourhoodsCB.getValue();
 
         ObservableList<TableViewEntry> data = historicalDAO.getTablePage(neighbourhood, assessmentClass, page);
-        propertyTableView.setItems(data);
+        propertyTable.setItems(data);
     }
 
     public int tableViewNextButtonClick(){
