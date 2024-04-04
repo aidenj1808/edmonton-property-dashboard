@@ -5,12 +5,15 @@ import com.example.cmpt305finalproject.DAOs.ApiPropertyAssessmentDAO;
 import com.example.cmpt305finalproject.cmpt305.AssessValueYearMap;
 import com.example.cmpt305finalproject.cmpt305.DataSeries;
 import com.example.cmpt305finalproject.cmpt305.LineGraphSeries;
+import com.example.cmpt305finalproject.cmpt305.TableViewEntry;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.controlsfx.control.SearchableComboBox;
 import java.net.URL;
@@ -31,38 +34,38 @@ public class HelloController implements Initializable {
     @FXML
     private ComboBox<String> seriesCB;
 
-    //@FXML
-    //private TableView<ObservableList> propertyTableView;
+    @FXML
+    private TableView<TableViewEntry> propertyTableView;
 
     @FXML
     private Label tableViewTitle;
 
-//    @FXML
-//    private TableColumn<TableViewEntry, String> accountNumberColumn;
-//
-//    @FXML
-//    private TableColumn<TableViewEntry, String> assessmentYearColumn;
-//
-//    @FXML
-//    private TableColumn<TableViewEntry, String> assessedValueColumn;
-//
-//    @FXML
-//    private TableColumn<TableViewEntry, String> suiteColumn;
-//
-//    @FXML
-//    private TableColumn<TableViewEntry, String> houseNumber;
-//
-//    @FXML
-//    private TableColumn<TableViewEntry, String> streetNameColumn;
-//
-//    @FXML
-//    private TableColumn<TableViewEntry, String> yearBuiltColumn;
-//
-//    @FXML
-//    private TableColumn<TableViewEntry, String> lotSizeColumn;
-//
-//    @FXML
-//    private TableColumn<TableViewEntry, String> garageColumn;
+    @FXML
+    private TableColumn<TableViewEntry, Integer> accountNumberColumn;
+
+    @FXML
+    private TableColumn<TableViewEntry, Integer> assessmentYearColumn;
+
+    @FXML
+    private TableColumn<TableViewEntry, Long> assessedValueColumn;
+
+    @FXML
+    private TableColumn<TableViewEntry, String> suiteColumn;
+
+    @FXML
+    private TableColumn<TableViewEntry, String> houseNumber;
+
+    @FXML
+    private TableColumn<TableViewEntry, String> streetNameColumn;
+
+    @FXML
+    private TableColumn<TableViewEntry, Integer> yearBuiltColumn;
+
+    @FXML
+    private TableColumn<TableViewEntry, String> lotSizeColumn;
+
+    @FXML
+    private TableColumn<TableViewEntry, String> garageColumn;
 
     @FXML
     private LineChart<String, Long> lineChart;
@@ -121,11 +124,19 @@ public class HelloController implements Initializable {
     }
 
     public void generatePropertiesTableButtonClick() {
-        //TODO
+        updateTableValues(0);
     }
 
     public void clearButtonClick() {
         lineChart.getData().clear();
         lineChart.setTitle(null);
+    }
+
+    public void updateTableValues(int page) {
+        String assessmentClass = assessmentClassesCB.getValue();
+        String neighbourhood = neighbourhoodsCB.getValue();
+
+        ObservableList<TableViewEntry> data = historicalDAO.getTablePage(neighbourhood, assessmentClass, page);
+        propertyTableView.setItems(data);
     }
 }

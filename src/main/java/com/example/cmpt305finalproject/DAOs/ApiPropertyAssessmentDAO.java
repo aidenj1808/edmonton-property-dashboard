@@ -1,6 +1,9 @@
 package com.example.cmpt305finalproject.DAOs;
 
 import com.example.cmpt305finalproject.cmpt305.PropertyAssessments;
+import com.example.cmpt305finalproject.cmpt305.TableViewEntry;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.IOException;
 import java.net.URI;
@@ -234,6 +237,39 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
             long median = getMedian(values);
             out.put(year, median);
         }
+        return out;
+    }
+
+    public ObservableList<TableViewEntry> getTablePage(String neighbourhood, String assessmentClass, int page) {
+        int limit = 100;
+        int offset = limit * page;
+        String query = "select account_number, assessment_year, assessed_value, suite, house_number, street_name, year_built, lot_size, garage " +
+                "where neighbourhood_name = '" + neighbourhood + "' " +
+                "and mill_class_1 = '" + assessmentClass + "' " +
+                "and tax_class_pct_1 = '100' " +
+                "and assessed_value != 0 " +
+                "order by assessed_value ASC " +
+                "limit " + limit +
+                "offset " + offset;
+
+        List<String> data = getFormattedDataColumn(query);
+        ObservableList<TableViewEntry> out = FXCollections.observableArrayList();
+
+        for (String line : data) {
+            String[] values = line.split(",");
+            int account = Integer.parseInt(values[0]);
+            int assessmentYear = Integer.parseInt(values[1]);
+            long assessedValue = Long.parseLong(values[2]);
+            String suite = values[3];
+            String houseNum = values[4];
+            String streetName = values[5];
+            int yearBuilt = Integer.parseInt(values[6]); // can't handle null, fix when back
+            String lotSize = values[7];
+            String garage = values[8];
+
+            out.add(new TableViewEntry(account, assessmentYear, assessedValue, suite, houseNum, streetName, yearBuilt, lotSize, garage));
+        }
+
         return out;
     }
 }
