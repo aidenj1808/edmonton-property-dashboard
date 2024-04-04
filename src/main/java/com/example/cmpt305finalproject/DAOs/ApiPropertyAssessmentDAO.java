@@ -176,4 +176,16 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
 
         return allData;
     }
+
+    private List<Long> removeOutliers(List<Long> data) {
+        Long Q3 = data.get(Math.floorDiv(data.size() * 3, 4)) + data.get(Math.ceilDiv(data.size() * 3, 4)) / 2;
+        Long Q1 = data.get(Math.floorDiv(data.size(), 4)) + data.get(Math.ceilDiv(data.size(), 4)) / 2;
+        Long IQR = Q3 - Q1;
+
+        Long upperBound = (long) (Q3 + (IQR * 1.5));
+        Long lowerBound = (long) (Q1 - (IQR * 1.5));
+
+        // temp so it doesn't make a fuss
+        return new ArrayList<>();
+    }
 }
