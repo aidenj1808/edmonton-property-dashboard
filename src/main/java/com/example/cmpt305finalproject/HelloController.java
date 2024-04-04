@@ -84,22 +84,21 @@ public class HelloController implements Initializable {
         seriesCB.getItems().setAll(seriesTypes);
     }
 
-    public void generateGraphClick() {
-        lineChart.getData().clear();
-        String assessmentClass = assessmentClassesCB.getValue();
-        String neighbourhood = neighbourhoodsCB.getValue();
-        String series = seriesCB.getValue();
-
-        generateGraph(neighbourhood, assessmentClass, series);
-    }
-
     private void generateGraph(String neighbourhood, String assessmentClass, String series) {
+
         Map<String, Long> data = getSeriesData(neighbourhood, assessmentClass, series);
 
         LineGraphSeries lineGraphSeries = new LineGraphSeries(data);
+        if (lineChart.getTitle() == null) {
+            lineChart.setTitle("Historical Data - Assessed Values vs Year For " + series);
+        } else {
+            lineChart.setTitle(lineChart.getTitle() + ", " + series);
+        }
+        lineGraphSeries.getSeries().setName(series);
 
-        lineChart.setTitle("Historical Data - " + series + " of Assessed Values vs Year");
-        lineChart.setLegendVisible(false);
+
+
+        lineChart.setLegendVisible(true);
         lineChart.getData().add(lineGraphSeries.getSeries());
     }
 
@@ -114,7 +113,11 @@ public class HelloController implements Initializable {
     }
 
     public void graphSeriesButtonClick() {
-            generateGraphClick();
+        String assessmentClass = assessmentClassesCB.getValue();
+        String neighbourhood = neighbourhoodsCB.getValue();
+        String series = seriesCB.getValue();
+
+        generateGraph(neighbourhood, assessmentClass, series);
     }
 
     public void generatePropertiesTableButtonClick() {
