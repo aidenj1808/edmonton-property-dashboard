@@ -61,7 +61,7 @@ public class HelloController implements Initializable {
         String assessmentClass = assessmentClassesCB.getValue();
         String neighbourhood = neighbourhoodsCB.getValue();
 
-        generateSumGraph(neighbourhood, assessmentClass);
+        generateAvgGraph(neighbourhood, assessmentClass);
     }
 
     private void generateSumGraph(String neighbourhood, String assessmentClass) {
@@ -74,8 +74,18 @@ public class HelloController implements Initializable {
         lineChart.getData().add(lineGraphSeries.getSeries());
     }
 
+    private void generateAvgGraph(String neighbourhood, String assessmentClass) {
+        Map<String, Long> avgData = historicalDAO.getYearAssessedValueAvg(neighbourhood, assessmentClass);
+
+        LineGraphSeries lineGraphSeries = new LineGraphSeries(avgData);
+
+        lineChart.setTitle("Historical Data - Avg of Assessed Values vs Year");
+        lineChart.setLegendVisible(false);
+        lineChart.getData().add(lineGraphSeries.getSeries());
+    }
+
     public void generateSummaryClick() {
-        //TODO
+        generateGraphClick();
     }
 
     public void clearButtonClick() {

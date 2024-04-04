@@ -147,7 +147,7 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO{
         Map<String, Long> out = new HashMap<>();
 
         data.forEach((key, value) -> {
-            out.put(key, (long) Integer.parseInt(value));
+            out.put(key, (long) Double.parseDouble(value));
         });
         return out;
     }
