@@ -1,12 +1,10 @@
 package com.example.cmpt305finalproject.DAOs;
 
-import com.example.cmpt305finalproject.cmpt305.PropertyAssessments;
 import com.example.cmpt305finalproject.cmpt305.TableViewEntry;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -105,11 +103,6 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
     @Override
     public List<String> getAssessmentClasses() {
         return getFormattedDataColumn("select distinct mill_class_1");
-    }
-
-    @Override
-    public List<PropertyAssessments> getNeighbourhoodData(String neighbourhood) {
-        return null;
     }
 
     private Map<String, String> getYearNumericalSummary(String neighbourhood, String assessmentClass, String func) {
