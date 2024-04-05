@@ -196,6 +196,10 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
     }
 
     private List<Long> removeOutliers(List<Long> data) {
+        // Return Empty List if no assessments found, ideally would handle by providing the user with a pop up alert.
+        if (data.isEmpty()) {
+            return new ArrayList<>();
+        }
         long Q3 = data.get(Math.floorDiv(data.size() * 3, 4)) + data.get(Math.ceilDiv(data.size() * 3, 4)) / 2;
         long Q1 = data.get(Math.floorDiv(data.size(), 4)) + data.get(Math.ceilDiv(data.size(), 4)) / 2;
         long IQR = Q3 - Q1;
@@ -209,6 +213,10 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
     }
 
     private long getMedian(List<Long> assessmentValues) {
+        // Return zero if no assessments found, ideally would handle by providing the user with a pop-up alert.
+        if (assessmentValues.isEmpty()) {
+            return 0;
+        }
         int size = assessmentValues.size();
         // even
         if ((size % 2) == 0) {
