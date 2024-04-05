@@ -1,6 +1,5 @@
 package com.example.cmpt305finalproject;
 
-
 import com.example.cmpt305finalproject.DAOs.ApiPropertyAssessmentDAO;
 import com.example.cmpt305finalproject.cmpt305.LineGraphSeries;
 import com.example.cmpt305finalproject.cmpt305.TableViewEntry;
@@ -8,7 +7,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
-import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -18,7 +16,8 @@ import org.controlsfx.control.SearchableComboBox;
 import java.net.URL;
 import java.util.*;
 
-public class HelloController implements Initializable {
+
+public class EdmontonHistoricalPropertyDataController implements Initializable {
     private final String currentYearEndpoint = "https://data.edmonton.ca/resource/q7d6-ambg.csv";
     private final String historicalEndpoint = "https://data.edmonton.ca/resource/qi6a-xuwt.csv";
     private ApiPropertyAssessmentDAO currentYearDAO;

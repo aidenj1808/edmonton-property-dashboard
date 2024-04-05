@@ -1,12 +1,9 @@
 package com.example.cmpt305finalproject.DAOs;
 
-import com.example.cmpt305finalproject.cmpt305.PropertyAssessments;
 import com.example.cmpt305finalproject.cmpt305.TableViewEntry;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -15,8 +12,8 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import static java.lang.Long.parseLong;
+
 
 public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
     private String nbh;
@@ -107,11 +104,6 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
         return getFormattedDataColumn("select distinct mill_class_1");
     }
 
-    @Override
-    public List<PropertyAssessments> getNeighbourhoodData(String neighbourhood) {
-        return null;
-    }
-
     private Map<String, String> getYearNumericalSummary(String neighbourhood, String assessmentClass, String func) {
         String query = "select assessment_year, " + func + "(assessed_value) " +
                 "where neighbourhood_name = '" + neighbourhood + "' " +
@@ -138,6 +130,10 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
 
     public Map<String, Long> getYearAssessedValueSum(String neighbourhood, String assessmentClass) {
         Map<String, String> data = getYearNumericalSummary(neighbourhood, assessmentClass, "sum");
+        // Return Empty Map if dataset is empty, ideally would handle by providing the user with a pop-up alert.
+        if (data.isEmpty()) {
+            return new HashMap<>();
+        }
         Map<String, Long> out = new HashMap<>();
 
         data.forEach((key, value) -> {
@@ -148,6 +144,10 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
 
     public Map<String, Long> getYearAssessedValueAvg(String neighbourhood, String assessmentClass) {
         Map<String, String> data = getYearNumericalSummary(neighbourhood, assessmentClass, "avg");
+        // Return Empty Map if dataset is empty, ideally would handle by providing the user with a pop-up alert.
+        if (data.isEmpty()) {
+            return new HashMap<>();
+        }
         Map<String, Long> out = new HashMap<>();
 
         data.forEach((key, value) -> {
@@ -203,7 +203,13 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
         return removeOutliers(getValuesByYear(neighbourhood, assessmentClass, year));
     }
 
-    private List<Long> removeOutliers(List<Long> data) {
+    public List<Long> removeOutliers(List<Long> data) {
+        // Return Empty List if five number summary can't be calculated,
+        // ideally would handle by providing the user with a pop-up alert.
+        System.out.println(data);
+        if (data.size() < 4) {
+            return new ArrayList<>();
+        }
         long Q3 = data.get(Math.floorDiv(data.size() * 3, 4)) + data.get(Math.ceilDiv(data.size() * 3, 4)) / 2;
         long Q1 = data.get(Math.floorDiv(data.size(), 4)) + data.get(Math.ceilDiv(data.size(), 4)) / 2;
         long IQR = Q3 - Q1;
@@ -217,6 +223,10 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
     }
 
     private long getMedian(List<Long> assessmentValues) {
+        // Return zero if no assessments found, ideally would handle by providing the user with a pop-up alert.
+        if (assessmentValues.isEmpty()) {
+            return 0;
+        }
         int size = assessmentValues.size();
         // even
         if ((size % 2) == 0) {

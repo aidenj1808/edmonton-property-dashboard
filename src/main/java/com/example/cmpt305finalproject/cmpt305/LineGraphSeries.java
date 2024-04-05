@@ -1,9 +1,8 @@
 package com.example.cmpt305finalproject.cmpt305;
 
-
 import javafx.scene.chart.XYChart;
-
 import java.util.Map;
+
 
 public class LineGraphSeries {
     private XYChart.Series<String, Long> series = new XYChart.Series<String, Long>();
