@@ -4,6 +4,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -84,6 +85,43 @@ class ApiPropertyAssessmentDAOTest {
         Map<String, Long> data = testClassHistorical.getYearAvgNoOutliers(neighbourhood, assessmentClass);
         System.out.println(rawData);
         System.out.println(data);
+    }
+
+    @Test
+    void removeOutliers() {
+        List<Long> dataWithZeroValues = new ArrayList<>();
+
+        List<Long> dataWithOneValue = new ArrayList<>();
+        dataWithOneValue.add(1L);
+
+        List<Long> dataWithTwoValues = new ArrayList<>();
+        dataWithTwoValues.add(1L);
+        dataWithTwoValues.add(1L);
+
+        List<Long> dataWithThreeValues = new ArrayList<>();
+        dataWithThreeValues.add(1L);
+        dataWithThreeValues.add(1L);
+        dataWithThreeValues.add(1L);
+
+        List<Long> dataWithFourValues = new ArrayList<>();
+        dataWithFourValues.add(1L);
+        dataWithFourValues.add(1L);
+        dataWithFourValues.add(1L);
+        dataWithFourValues.add(1L);
+
+        List<Long> dataWithFiveValues = new ArrayList<>();
+        dataWithFiveValues.add(1L);
+        dataWithFiveValues.add(1L);
+        dataWithFiveValues.add(1L);
+        dataWithFiveValues.add(1L);
+        dataWithFiveValues.add(1L);
+
+        //System.out.println(testClassHistorical.removeOutliers(dataWithOneValue));
+        //System.out.println(testClassHistorical.removeOutliers(dataWithTwoValues));
+        //System.out.println(testClassHistorical.removeOutliers(dataWithThreeValues));
+        System.out.println(testClassHistorical.removeOutliers(dataWithFourValues));
+        System.out.println(testClassHistorical.removeOutliers(dataWithFiveValues));
+
     }
 
 }

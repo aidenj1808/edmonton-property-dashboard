@@ -130,6 +130,10 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
 
     public Map<String, Long> getYearAssessedValueSum(String neighbourhood, String assessmentClass) {
         Map<String, String> data = getYearNumericalSummary(neighbourhood, assessmentClass, "sum");
+        // Return Empty Map if dataset is empty, ideally would handle by providing the user with a pop-up alert.
+        if (data.isEmpty()) {
+            return new HashMap<>();
+        }
         Map<String, Long> out = new HashMap<>();
 
         data.forEach((key, value) -> {
@@ -140,6 +144,10 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
 
     public Map<String, Long> getYearAssessedValueAvg(String neighbourhood, String assessmentClass) {
         Map<String, String> data = getYearNumericalSummary(neighbourhood, assessmentClass, "avg");
+        // Return Empty Map if dataset is empty, ideally would handle by providing the user with a pop-up alert.
+        if (data.isEmpty()) {
+            return new HashMap<>();
+        }
         Map<String, Long> out = new HashMap<>();
 
         data.forEach((key, value) -> {
@@ -195,9 +203,11 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
         return removeOutliers(getValuesByYear(neighbourhood, assessmentClass, year));
     }
 
-    private List<Long> removeOutliers(List<Long> data) {
-        // Return Empty List if no assessments found, ideally would handle by providing the user with a pop up alert.
-        if (data.isEmpty()) {
+    public List<Long> removeOutliers(List<Long> data) {
+        // Return Empty List if five number summary can't be calculated,
+        // ideally would handle by providing the user with a pop-up alert.
+        System.out.println(data);
+        if (data.size() < 4) {
             return new ArrayList<>();
         }
         long Q3 = data.get(Math.floorDiv(data.size() * 3, 4)) + data.get(Math.ceilDiv(data.size() * 3, 4)) / 2;

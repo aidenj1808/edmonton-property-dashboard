@@ -18,4 +18,6 @@ public interface PropertyAssessmentDAO {
     Map<String, Long> getYearAssessedValueAvg(String neighbourhood, String assessmentClass);
 
     Map<String, Long> getYearAvgNoOutliers(String neighbourhood, String assessmentClass);
+
+    List<Long> removeOutliers(List<Long> data);
 }
