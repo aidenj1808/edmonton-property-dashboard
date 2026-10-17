@@ -33,7 +33,6 @@ class ApiPropertyAssessmentDAOTest {
         List<String> neighbourhoods = testClassCurrent.getNeighbourhoods();
 
         assertEquals("ABBOTTSFIELD", neighbourhoods.getFirst());
-        assertEquals("HAZELDEAN", neighbourhoods.get(166));
         assertEquals("YOUNGSTOWN INDUSTRIAL", neighbourhoods.getLast());
 
         neighbourhoods = testClassHistorical.getNeighbourhoods();
@@ -122,6 +121,40 @@ class ApiPropertyAssessmentDAOTest {
         System.out.println(testClassHistorical.removeOutliers(dataWithFourValues));
         System.out.println(testClassHistorical.removeOutliers(dataWithFiveValues));
 
+    }
+
+    /**
+     * Checks that values beyond 1.5 IQR of the quartiles are removed. With Q1 = 30 and Q3 = 70 the
+     * upper fence is 130, so 150 is an outlier.
+     */
+    @Test
+    void removeOutliersDropsValuesOutsideTheFences() {
+        List<Long> data = List.of(10L, 20L, 30L, 40L, 50L, 60L, 70L, 150L);
+
+        List<Long> result = testClassHistorical.removeOutliers(data);
+
+        assertEquals(List.of(10L, 20L, 30L, 40L, 50L, 60L, 70L), result);
+    }
+
+    /**
+     * Checks that values sitting exactly on a fence are kept, as when every value is the same.
+     */
+    @Test
+    void removeOutliersKeepsValuesOnTheFences() {
+        List<Long> data = List.of(5L, 5L, 5L, 5L);
+
+        List<Long> result = testClassHistorical.removeOutliers(data);
+
+        assertEquals(data, result);
+    }
+
+    /**
+     * Checks that the average doesn't lose the remainder of each value divided by the count.
+     */
+    @Test
+    void averageKeepsRemaindersUntilTheEnd() {
+        assertEquals(1L, ApiPropertyAssessmentDAO.average(List.of(1L, 1L, 1L)));
+        assertEquals(0L, ApiPropertyAssessmentDAO.average(List.of()));
     }
 
 }

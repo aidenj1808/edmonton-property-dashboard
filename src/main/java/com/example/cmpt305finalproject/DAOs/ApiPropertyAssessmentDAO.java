@@ -4,6 +4,7 @@ import com.example.cmpt305finalproject.cmpt305.TableViewEntry;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -31,7 +32,15 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
         return endpoint + "?$query=" + URLEncoder.encode(query, StandardCharsets.UTF_8);
     }
 
-    private HttpResponse<String> fetchData(String query) throws IOException, InterruptedException {
+    /**
+     * Sends a SoQL query to this DAO's dataset.
+     *
+     * @param query the SoQL query to run
+     * @return the API's response, with the results as CSV in its body
+     * @throws UncheckedIOException if the API can't be reached
+     * @throws IllegalStateException if the request is interrupted or the API returns an error status
+     */
+    private HttpResponse<String> fetchData(String query) {
         String url = formatQuery(query);
 
         HttpClient client = HttpClient.newHttpClient();
@@ -40,23 +49,37 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
                 .GET()
                 .build();
 
-        return client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response;
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException e) {
+            throw new UncheckedIOException("Couldn't reach the Edmonton Open Data API at " + endpoint, e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("Interrupted while waiting for the Edmonton Open Data API", e);
+        }
+
+        if (response.statusCode() != 200) {
+            throw new IllegalStateException("The Edmonton Open Data API returned HTTP "
+                    + response.statusCode() + " for the query: " + query);
+        }
+        return response;
     }
 
+    /**
+     * Fetches the dataset's column names.
+     *
+     * @return the column names, in the order the API returns them
+     */
     private List<String> getHeader() {
-        try {
-            HttpResponse<String> response = fetchData("Select* limit 1");
+        HttpResponse<String> response = fetchData("Select* limit 1");
 
-            return Arrays.stream(Arrays.stream(response.body().split("\n"))
-                            .map(x -> x.replace("\"", ""))
-                            .toList()
-                            .getFirst()
-                            .split(","))
-                    .toList();
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-            return new ArrayList<String>();
-        }
+        return Arrays.stream(Arrays.stream(response.body().split("\n"))
+                        .map(x -> x.replace("\"", ""))
+                        .toList()
+                        .getFirst()
+                        .split(","))
+                .toList();
     }
 
     /**
@@ -78,20 +101,21 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
         return "";
     }
 
+    /**
+     * Runs a query and returns its result rows as sorted CSV lines, without the header or quotes.
+     *
+     * @param query the SoQL query to run
+     * @return one string per non-empty result row
+     */
     private List<String> getFormattedDataColumn(String query) {
-        try {
-            HttpResponse<String> response = fetchData(query);
+        HttpResponse<String> response = fetchData(query);
 
-            return Arrays.stream(response.body().split("\n"))
-                    .map(x -> x.replace("\"", ""))
-                    .skip(1)
-                    .sorted()
-                    .filter(x -> !x.isEmpty())
-                    .collect(Collectors.toList());
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-            return List.of("Error: unable to fetch data");
-        }
+        return Arrays.stream(response.body().split("\n"))
+                .map(x -> x.replace("\"", ""))
+                .skip(1)
+                .sorted()
+                .filter(x -> !x.isEmpty())
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -104,6 +128,14 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
         return getFormattedDataColumn("select distinct mill_class_1");
     }
 
+    /**
+     * Has the API aggregate assessed values by year for one neighbourhood and assessment class.
+     *
+     * @param neighbourhood the neighbourhood to filter on
+     * @param assessmentClass the assessment class to filter on
+     * @param func the SoQL aggregate function to apply, such as "sum" or "avg"
+     * @return the aggregated value for each assessment year, both as strings
+     */
     private Map<String, String> getYearNumericalSummary(String neighbourhood, String assessmentClass, String func) {
         String query = "select assessment_year, " + func + "(assessed_value) " +
                 "where neighbourhood_name = '" + neighbourhood + "' " +
@@ -111,21 +143,13 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
                 "and tax_class_pct_1 = '100' " +
                 "and assessed_value != 0 " +
                 "group by assessment_year";
-        List<String> data = getFormattedDataColumn(query);
+        HttpResponse<String> response = fetchData(query);
 
-        try {
-            HttpResponse<String> response = fetchData(query);
-
-            return Arrays.stream(response.body().split("\n"))
-                    .map(x -> x.replace("\"", "").split(","))
-                    .skip(1)
-                    .collect(Collectors.toMap(x -> x[0],
-                            x -> x[1]));
-
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-            return new HashMap<String, String>();
-        }
+        return Arrays.stream(response.body().split("\n"))
+                .map(x -> x.replace("\"", "").split(","))
+                .skip(1)
+                .collect(Collectors.toMap(x -> x[0],
+                        x -> x[1]));
     }
 
     public Map<String, Long> getYearAssessedValueSum(String neighbourhood, String assessmentClass) {
@@ -162,16 +186,27 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
 
         for (String year : years) {
             List<Long> values = getValuesByYearNoOutliers(neighbourhood, assessmentClass, Integer.parseInt(year));
-
-            long avg = 0;
-            for (Long value : values) {
-                avg += value / values.size();
-            }
-
-            out.put(year, avg);
+            out.put(year, average(values));
         }
 
         return out;
+    }
+
+    /**
+     * Averages a list of assessed values, rounding down to the nearest dollar.
+     *
+     * @param values the assessed values to average
+     * @return the average, or 0 if the list is empty
+     */
+    static long average(List<Long> values) {
+        if (values.isEmpty()) {
+            return 0;
+        }
+        long sum = 0;
+        for (Long value : values) {
+            sum += value;
+        }
+        return sum / values.size();
     }
 
     public List<Long> getValuesByYear(String neighbourhood, String assessmentClass, int year) {
@@ -203,22 +238,27 @@ public class ApiPropertyAssessmentDAO implements PropertyAssessmentDAO {
         return removeOutliers(getValuesByYear(neighbourhood, assessmentClass, year));
     }
 
+    /**
+     * Removes values more than 1.5 times the interquartile range below Q1 or above Q3.
+     *
+     * @param data the values to filter, sorted in ascending order
+     * @return the values within the fences, or an empty list if there are fewer than four values
+     */
     public List<Long> removeOutliers(List<Long> data) {
         // Return Empty List if five number summary can't be calculated,
         // ideally would handle by providing the user with a pop-up alert.
-        System.out.println(data);
         if (data.size() < 4) {
             return new ArrayList<>();
         }
-        long Q3 = data.get(Math.floorDiv(data.size() * 3, 4)) + data.get(Math.ceilDiv(data.size() * 3, 4)) / 2;
-        long Q1 = data.get(Math.floorDiv(data.size(), 4)) + data.get(Math.ceilDiv(data.size(), 4)) / 2;
+        long Q3 = (data.get(Math.floorDiv(data.size() * 3, 4)) + data.get(Math.ceilDiv(data.size() * 3, 4))) / 2;
+        long Q1 = (data.get(Math.floorDiv(data.size(), 4)) + data.get(Math.ceilDiv(data.size(), 4))) / 2;
         long IQR = Q3 - Q1;
 
         long upperBound = (long) (Q3 + (IQR * 1.5));
         long lowerBound = (long) (Q1 - (IQR * 1.5));
 
         return data.stream()
-                .filter(x -> x > lowerBound && x < upperBound)
+                .filter(x -> x >= lowerBound && x <= upperBound)
                 .collect(Collectors.toList());
     }
 
